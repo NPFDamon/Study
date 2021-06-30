@@ -1,12 +1,12 @@
 ## Java
 + **JDK源码**   
-- [ ] Hashmap   
-- [ ] ThreadLocal   
-- [ ] ArrayList   
-- [ ] LinkedList   
-- [ ] String   
-- [ ] StringBuffer   
-- [ ] StringBuilder   
+- [ ] [Hashmap](https://github.com/NPFDamon/Study/blob/main/src/main/resources/Map.md)   
+- [ ] [ThreadLocal]()   
+- [ ] [ArrayList]()   
+- [ ] [LinkedList]()   
+- [ ] [String]()   
+- [ ] [StringBuffer]()   
+- [ ] [StringBuilder]()   
 + **并发编程**   
 - [ ] volatile
 - [ ] synchronized
