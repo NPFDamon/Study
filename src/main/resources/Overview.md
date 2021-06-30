@@ -18,7 +18,7 @@
 + [**多线程**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/thread.md)   
 - [ ] 线程
 - [ ] 线程池
-+ [**JVM**]((https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md))   
++ [**JVM**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)   
 - [ ] GC优化
 - [ ] JVM内存
 - [ ] 类对象分析
