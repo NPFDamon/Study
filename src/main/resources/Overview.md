@@ -35,7 +35,7 @@
 - [ ] 怎么代理一个类
 - [ ] 类代理的原理
 - [ ] 代理框架
-+ [**IO**]()
++ [**IO**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/io.md)
 - [ ] AIO,NIO,BIO
 - [ ] Netty
 ---
@@ -107,10 +107,10 @@
 - [ ] EX
 ---
 ##  分布式   
-+ [**CAP**]()
-+ [**BASE**]()
-+ [**Raft**]()
-+ [**Paxos**]()
++ [**CAP**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/distributed/distributed.md)
++ [**BASE**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/distributed/distributed.md)
++ [**Raft**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/distributed/distributed.md)
++ [**Paxos**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/distributed/distributed.md)
 ---
 ##组件
 + [**Dubbo**]()
