@@ -6,7 +6,7 @@
 - [ ] LinkedList   
 - [ ] String   
 - [ ] StringBuffer   
-- [ ] StringBuild   
+- [ ] StringBuilder   
 + **并发编程**   
 - [ ] volatile
 - [ ] synchronized

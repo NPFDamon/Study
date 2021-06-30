@@ -1,8 +1,5 @@
 package com.damon.algorithm;
 
-import org.w3c.dom.Node;
-
-import java.util.List;
 
 /**
  * @Author: Damon
@@ -63,7 +60,7 @@ public class ListReverse {
 
     /**
      * 递归方式
-     * 1 -> 2 -> 3 -> null
+     * detail 参考:https://www.huaweicloud.com/articles/8357697.html
      *
      *
      * @param head

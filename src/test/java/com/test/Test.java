@@ -27,7 +27,15 @@ public class Test {
         if(headNode == null || headNode.next == null){
             return headNode;
         }
+        System.out.println("e:" + headNode.value);
         Node newHead  = res1(headNode.next);
+        System.out.println(":" + headNode.value);
+        System.out.println("n:" + headNode.next.value);
+
+        /**
+         * 2.next = 3
+         * 2.next.next = 3.next
+         */
         headNode.next.next = headNode;
         headNode.next = null;
         return newHead;
