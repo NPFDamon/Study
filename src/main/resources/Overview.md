@@ -35,6 +35,9 @@
 - [ ] 怎么代理一个类
 - [ ] 类代理的原理
 - [ ] 代理框架
++ [**IO**]()
+- [ ] AIO,NIO,BIO
+- [ ] Netty
 ---
 ## Redis
 + [**命令**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/redis/redis.md)   
@@ -70,7 +73,7 @@
 - [ ] 幻读   
 - [ ] 不可重复读   
 - [ ] 事务隔离级别   
-- [ ] 并发事务  
+- [ ] 分布式事务  
 - [ ] 事务实现原理    
 + [**日志**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/log.md)   
 - [ ] 慢日志查询   
@@ -102,6 +105,12 @@
 + [**SpringCloud**]()   
 - [ ] EX
 - [ ] EX
+---
+##  分布式   
++ [**CAP**]()
++ [**BASE**]()
++ [**Raft**]()
++ [**Paxos**]()
 ---
 ##组件
 + [**Dubbo**]()
