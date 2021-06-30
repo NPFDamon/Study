@@ -90,7 +90,7 @@
 - [ ] InnoDB   
 - [ ] MyISAM   
 ---
-##框架
+## 框架
 + [**Spring**]()  
 - [ ] IOC，AOP
 - [ ] Bean注册过程   
@@ -112,7 +112,7 @@
 + [**Raft**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/distributed/distributed.md)
 + [**Paxos**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/distributed/distributed.md)
 ---
-##组件
+## 组件
 + [**Dubbo**]()
 - [ ] 通讯模型
 - [ ] Dubbo和SpringCloud区别
@@ -124,12 +124,12 @@
 - [ ] Kafka
 + **ES**
 ---
-##工具
+## 工具
 + **Idea**
 + **Maven**
 + **Jenkins**
 ---
-##环境
+## 环境
 + **Linux** 
 + **Tomcat**
 + **Docker**
