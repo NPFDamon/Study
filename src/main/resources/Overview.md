@@ -55,37 +55,37 @@
 ---
 ## MySQL
 
-+ **锁**    
-- [ ] [全局锁]()   
-- [ ] [表锁]()   
-- [ ] [行锁]()   
-- [ ] [乐观锁]() 
-- [ ] [悲观锁]() 
-- [ ] [排它锁]() 
-- [ ] [锁优化]()  
-+ **事务**   
-- [ ] [事务特性ACID]()   
-- [ ] [脏读]()   
-- [ ] [幻读]()   
-- [ ] [幻读]()   
-- [ ] [不可重复读]()   
-- [ ] [事务隔离级别]()   
-- [ ] [并发事务]()  
-- [ ] [事务实现原理]()    
-+ **日志**   
-- [ ] [慢日志查询]()   
-- [ ] [错误日志]()   
-- [ ] [redo log 重做日志]()
-- [ ] [binlog 归档日志]()   
-- [ ] [undo log 回档日志]()   
-+ **索引**   
-- [ ] [聚集索引]()   
-- [ ] [非聚集索引]()   
-- [ ] [最左匹配原则]()   
-- [ ] [前缀索引]()   
-+ **存储引擎**   
-- [ ] [InnoDB]()   
-- [ ] [MyISAM]()   
++ [**锁**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/lock.md)    
+- [ ] 全局锁   
+- [ ] 表锁   
+- [ ] 行锁   
+- [ ] 乐观锁 
+- [ ] 悲观锁 
+- [ ] 排它锁 
+- [ ] 锁优化  
++ [**事务**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/trans.md)   
+- [ ] 事务特性ACID   
+- [ ] 脏读   
+- [ ] 幻读   
+- [ ] 幻读   
+- [ ] 不可重复读   
+- [ ] 事务隔离级别   
+- [ ] 并发事务  
+- [ ] 事务实现原理    
++ [**日志**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/log.md)   
+- [ ] 慢日志查询   
+- [ ] 错误日志   
+- [ ] redo log 重做日志
+- [ ] binlog 归档日志   
+- [ ] undo log 回档日志   
++ [**索引**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/index.md)   
+- [ ] 聚集索引   
+- [ ] 非聚集索引   
+- [ ] 最左匹配原则   
+- [ ] 前缀索引   
++ [**存储引擎**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/engin.md)   
+- [ ] InnoDB   
+- [ ] MyISAM   
 ---
 ##框架
 + [**Spring**]()  
