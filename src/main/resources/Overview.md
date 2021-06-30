@@ -15,16 +15,16 @@
 - [ ] [CAS](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
 - [ ] [AQS](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
 - [ ] [JMM](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
-+ **多线程**   
-- [ ] [线程](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/thread.md)
-- [ ] [线程池](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/thread.md)
-+ **JVM**   
-- [ ] [GC优化](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)
-- [ ] [JVM内存](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)
-- [ ] [类对象分析](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)
-- [ ] [new Object时都做了什么](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)
-- [ ] [运行时数据区](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)
-- [ ] [JVM内存模型及GC算法](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)
++ [**多线程**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/thread.md)   
+- [ ] 线程
+- [ ] 线程池
++ [**JVM**]((https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md))   
+- [ ] GC优化
+- [ ] JVM内存
+- [ ] 类对象分析
+- [ ] new Object时都做了什么
+- [ ] 运行时数据区
+- [ ] JVM内存模型及GC算法
 + [**设计模式**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/dp/dp.md)   
 - [ ] 设计模式6大准则
 - [ ] 创建型模式
