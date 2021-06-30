@@ -8,49 +8,49 @@
 - [ ] [StringBuffer](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/String.md)   
 - [ ] [StringBuilder](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/String.md)   
 + **并发编程**   
-- [ ] [volatile]()
-- [ ] [synchronized]()
-- [ ] [lock]()
-- [ ] [ReentrantLock]()
-- [ ] [CAS]()
-- [ ] [AQS]()
-- [ ] [JMM]()
+- [ ] [volatile](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
+- [ ] [synchronized](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
+- [ ] [lock](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
+- [ ] [ReentrantLock](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
+- [ ] [CAS](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
+- [ ] [AQS](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
+- [ ] [JMM](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
 + **多线程**   
-- [ ] [线程]()
-- [ ] [线程池]()
+- [ ] [线程](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/thread.md)
+- [ ] [线程池](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/thread.md)
 + **JVM**   
-- [ ] [GC优化]()
-- [ ] [JVM内存]()
-- [ ] [类对象分析]()
-- [ ] [new Object时都做了什么]()
-- [ ] [运行时数据区]()
-- [ ] [JVM内存模型及GC算法]()
-+ **设计模式**   
-- [ ] [设计模式6大准则]()
-- [ ] [创建型模式]()
-- [ ] [结构型模式]()
-- [ ] [行为模式]()
-+ **反射，代理**
-- [ ] [怎么实现反射调用]()
-- [ ] [怎么代理一个类]()
-- [ ] [类代理的原理]()
-- [ ] [代理框架]()
+- [ ] [GC优化](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)
+- [ ] [JVM内存](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)
+- [ ] [类对象分析](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)
+- [ ] [new Object时都做了什么](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)
+- [ ] [运行时数据区](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)
+- [ ] [JVM内存模型及GC算法](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)
++ [**设计模式**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/dp/dp.md)   
+- [ ] 设计模式6大准则
+- [ ] 创建型模式
+- [ ] 结构型模式
+- [ ] 行为模式
++ [**反射，代理**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/rp/rp.md)
+- [ ] 怎么实现反射调用
+- [ ] 怎么代理一个类
+- [ ] 类代理的原理
+- [ ] 代理框架
 ---
 ## Redis
-+ **命令**   
-- [ ] [计数]()
-- [ ] [排序]()
-- [ ] [加锁]()
-+ **架构**  
-- [ ] [常用数据类型]()
-- [ ] [数据淘汰策略]()
-- [ ] [Redis为什么快]()
-- [ ] [持久化]()
-+ **应用**   
-- [ ] [缓存雪崩，缓存穿透，缓存击穿，缓存预热，缓存更新，缓存降级]()
-- [ ] [Pipeline]()
-- [ ] [Redis集群]()
-- [ ] [Redis同步机制]()
++ [**命令**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/redis/redis.md)   
+- [ ] 计数
+- [ ] 排序
+- [ ] 加锁
++ [**架构**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/redis/redis.md)  
+- [ ] 常用数据类型
+- [ ] 数据淘汰策略
+- [ ] Redis为什么快
+- [ ] 持久化
++ [**应用**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/redis/redis.md)   
+- [ ] 缓存雪崩，缓存穿透，缓存击穿，缓存预热，缓存更新，缓存降级
+- [ ] Pipeline
+- [ ] Redis集群
+- [ ] Redis同步机制
 
 ---
 ## MySQL
