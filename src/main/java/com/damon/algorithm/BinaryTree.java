@@ -186,7 +186,7 @@ public class BinaryTree {
      *  /  \   / \
      * 4    5 6   7
      */
-    private static class TreeNode {
+    public static class TreeNode {
         private TreeNode left;
         private TreeNode right;
         private Integer value;
