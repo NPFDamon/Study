@@ -119,4 +119,71 @@
     .执行系统调用task   
     .执行定时任务task   
     通过配置boss和worker线程池的线程个数以及是否共享线程池等方式，Netty的线程模型可以在以上三种Reactor模型之间进行切换。   
-    
+
++ **零拷贝**
+    零拷贝(Zero-copy)技术，避免在用户态和内核态直接进行来回的数据拷贝。没有在内存层面进行数据拷贝,也就是或全程没有通过CPU进行数据搬运,
+    所以的数据都是通过DMA(直接内存访问 Direct Memory Access)进行的。
+    DMA技术:在进行IO设备和内存数据进行传输的时候，数据的传输全部交给DMA控制器，而CPU不参与任何数据搬运的工作，这样CPU就可以做其他事情。   
+    ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/DRM_I_O.png)  
+    Netty零拷贝
+    1.Netty在接收和发送ByteBuffer时使用直接内存进行Socket读写，不需要进行缓冲区的二次读写。如果使用JVM堆内存进行Socket读写，JVM会将堆内存的buffer拷贝一份
+    到直接内存中，然后在进行Socket读写。相比使用直接内存多了一次数据拷贝。
+    2.Netty的文件传输调用FileRegion的transferTo方法，可以直接将文件缓存区的数据发送到目标channel，避免通过循环write的方式导致内存拷贝问题。
+    ```java
+        @Override
+        public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
+         RandomAccessFile raf = null;
+         long length = -1;
+         try {
+         // 1. 通过 RandomAccessFile 打开一个文件.
+         raf = new RandomAccessFile(msg, "r");
+         length = raf.length();
+         } catch (Exception e) {
+         ctx.writeAndFlush("ERR: " + e.getClass().getSimpleName() + ": " + e.getMessage() + '\n');
+         return;
+         } finally {
+         if (length < 0 && raf != null) {
+         raf.close();
+         }
+         }
+         ctx.write("OK: " + raf.length() + '\n');
+         if (ctx.pipeline().get(SslHandler.class) == null) {
+         // SSL not enabled - can use zero-copy file transfer.
+         // 2. 调用 raf.getChannel() 获取一个 FileChannel.
+         // 3. 将 FileChannel 封装成一个 DefaultFileRegion
+         ctx.write(new DefaultFileRegion(raf.getChannel(), 0, length));
+         } else {
+         // SSL enabled - cannot use zero-copy file transfer.
+         ctx.write(new ChunkedFile(raf));
+         }
+         ctx.writeAndFlush("\n");
+        }
+     ```
+    3.Netty提供CompositeByteBuf类，方法可以将多个ByteBuf合并为一个逻辑的ByteBuf,避免了各个ByteBuf之间的拷贝。
+    ```java
+        ByteBuf header = ...
+        ByteBuf body = ...
+        // 新建CompositeByteBuf对象
+        CompositeByteBuf compositeByteBuf = Unpooled.compositeBuffer();
+        // 第一个参数是true, 表示当添加新的ByteBuf时, 自动递增 CompositeByteBuf 的 writeIndex。
+        // 如果不传第一个参数或第一个参数为false，则合并后的compositeByteBuf的writeIndex不移动，即不能从compositeByteBuf中读取到新合并的数据。
+        compositeByteBuf.addComponents(true,header,body);
+    ```
+    4.通过wrap操作，可以将byte[]数组、ByteBuf、ByteBuffer等包装成一个Netty ByteBuf对象，进而避免拷贝操作。
+    ```java
+        byte[] bytes = ...
+        ByteBuf byteBuf = Unpooled.wrappedBuffer(bytes);
+    ```
+    5.ByteBuf支持slice操作，可以将ByteBuf分解为多个共享同一个存储区域ByteBuf,避免内存的拷贝。
+    ByteBuf提供了两个slice操作方法:
+    ```java
+      public ByteBuf slice();
+      public ByteBuf slice(int index, int length);
+    ```
+    ByteBuf.slice方法的简单用法:
+    ```java
+      ByteBuf byteBuf = ...
+      ByteBuf header = byteBuf.slice(0, 5);
+      ByteBuf body = byteBuf.slice(5, 10);
+    ```
+     > 参考【https://www.cnblogs.com/xiaolincoding/p/13719610.html】
