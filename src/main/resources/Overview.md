@@ -37,7 +37,7 @@
 - [ ] 代理框架
 + [**IO**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/io.md)
 - [x] AIO,NIO,BIO
-- [ ] Netty
+- [x] Netty
 ---
 ## Redis
 + [**命令**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/redis/redis.md)   
