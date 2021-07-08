@@ -36,7 +36,7 @@
 - [ ] 类代理的原理
 - [ ] 代理框架
 + [**IO**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/io.md)
-- [ ] AIO,NIO,BIO
+- [x] AIO,NIO,BIO
 - [ ] Netty
 ---
 ## Redis
