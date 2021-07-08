@@ -113,7 +113,7 @@
     Boss线程池的作用：   
     .接收客户端连接，初始化Channel参数。   
     .将链路状态变更时间通知给ChannelPipeline。   
-    Worker线程池作用：
+    Worker线程池作用：   
     .异步读取发送端的数据报文，发送读事件到ChannelPipeline。   
     .异步发送消息到通讯对端，调用ChannelPipeline的消息发送接口。   
     .执行系统调用task   
