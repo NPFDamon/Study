@@ -175,15 +175,15 @@
         ByteBuf byteBuf = Unpooled.wrappedBuffer(bytes);
     ```
     5.ByteBuf支持slice操作，可以将ByteBuf分解为多个共享同一个存储区域ByteBuf,避免内存的拷贝。    
-        ByteBuf提供了两个slice操作方法:   
-        ```java
-          public ByteBuf slice();
-          public ByteBuf slice(int index, int length);
-        ```
-        ByteBuf.slice方法的简单用法:   
-        ```java
-          ByteBuf byteBuf = ...
-          ByteBuf header = byteBuf.slice(0, 5);
-          ByteBuf body = byteBuf.slice(5, 10);
-        ```
+    ByteBuf提供了两个slice操作方法:   
+    ```java
+      public ByteBuf slice();
+      public ByteBuf slice(int index, int length);
+    ```
+    ByteBuf.slice方法的简单用法:   
+    ```java
+      ByteBuf byteBuf = ...
+      ByteBuf header = byteBuf.slice(0, 5);
+      ByteBuf body = byteBuf.slice(5, 10);
+    ```
      > 参考【https://www.cnblogs.com/xiaolincoding/p/13719610.html】
