@@ -122,7 +122,7 @@
 
 + **零拷贝**   
     零拷贝(Zero-copy)技术，避免在用户态和内核态直接进行来回的数据拷贝。没有在内存层面进行数据拷贝,也就是或全程没有通过CPU进行数据搬运,
-    所以的数据都是通过DMA(直接内存访问 Direct Memory Access)进行的。
+    所以的数据都是通过DMA(直接内存访问 Direct Memory Access)进行的。   
     DMA技术:在进行IO设备和内存数据进行传输的时候，数据的传输全部交给DMA控制器，而CPU不参与任何数据搬运的工作，这样CPU就可以做其他事情。   
     ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/DRM_I_O.png)  
     Netty零拷贝  
@@ -175,15 +175,15 @@
         ByteBuf byteBuf = Unpooled.wrappedBuffer(bytes);
     ```
     5.ByteBuf支持slice操作，可以将ByteBuf分解为多个共享同一个存储区域ByteBuf,避免内存的拷贝。    
-    ByteBuf提供了两个slice操作方法:   
-    ```java
-      public ByteBuf slice();
-      public ByteBuf slice(int index, int length);
-    ```
-    ByteBuf.slice方法的简单用法:   
-    ```java
-      ByteBuf byteBuf = ...
-      ByteBuf header = byteBuf.slice(0, 5);
-      ByteBuf body = byteBuf.slice(5, 10);
-    ```
+        ByteBuf提供了两个slice操作方法:   
+        ```java
+          public ByteBuf slice();
+          public ByteBuf slice(int index, int length);
+        ```
+        ByteBuf.slice方法的简单用法:   
+        ```java
+          ByteBuf byteBuf = ...
+          ByteBuf header = byteBuf.slice(0, 5);
+          ByteBuf body = byteBuf.slice(5, 10);
+        ```
      > 参考【https://www.cnblogs.com/xiaolincoding/p/13719610.html】
