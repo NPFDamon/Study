@@ -1,7 +1,7 @@
 ## Lock
     在并发编程中，为了解决程序中多个进程或线程对资源的抢占问题，引入锁的概念。锁是多线程环境下的一种同步机制，对线程的访问资源权限做控制，实现并发策略。
 + **锁的分类**   
-    ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/lock.png)  
+    ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/lock.png)  
     + 偏向锁：一段代码一种被一个线程所访问，那么这个线程会自动获得锁，锁的这段代码一种被一个线程访问。   
     + 轻量级锁：当偏向锁被其他线程访问时升级为轻量级锁，其他线程循环判断是否获能获取到锁，成为自旋。  
     + 重量级锁：当自旋次数达到一定次数之后，进入阻塞状态，轻量级锁升级为重量级锁。    
@@ -24,9 +24,9 @@
     
 + **Java中的锁**   
     + synchronized关键字   
-        ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/synchronized.png)   
+        ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/synchronized.png)   
         对象头：   
-        ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/header.png) 
+        ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/header.png) 
         HotSpot虚拟机中，对象头在内存中的布局可分为三个区域：对象头（Header），实例数据（Instance Data)和对齐填充（Padding）   
         * mark-word：对象标记占4个字节,用于存储一些标记位，比如：哈希值，轻量级锁的标记位，偏向锁标记位，分代年龄等。
         在mark-word锁类型标记中，无锁，偏向锁，轻量锁，重量锁，以及GC标记，5种类中没法用2比特标记（2比特最终有4种组合00、01、10、11），所以无锁、偏向锁，前又占了一位偏向锁标记。
@@ -39,24 +39,24 @@
         在HotSpot虚拟机中，monitor是由C++中ObjectMonitor实现。   
         synchronized的运行机制，就是JVM监测对象在不同的竞争状态时，会自动切换到适合的锁实现，这种切换就是锁的升级降级。   
         执行锁的过程：
-        ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/synchronized_lock.png)    
+        ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/synchronized_lock.png)    
         每个Java对象头中都包含Monitor对象（存储的指针的指向），synchronized也就是通过这一种方式获取锁，也就解释了为什么synchronized()括号里的任何对象都加了锁。
         同步方法时是通过ACC_SYNCHRONIZED标记符合指定该方法是一个同步方法，从而执行相关的同步调用。线程进入这个方法时，都会判断是否有此标识，然后开始竞争 Monitor 对象。   
         monitorenter，在判断拥有同步标识ACC_SYNCHRONIZED抢先进入此方法的线程会拥有Monitor的owner次数计数器加一。
         monitorexit，当执行完退出之后，计数器减一，归零后其他线程可获得。 
     + ReentrantLock   
-        ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/reentrantLock_plus.png)      
+        ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/reentrantLock_plus.png)      
         ReentrantLock是基于Lock实现的可重入锁，所有的Lock都是基于AQS实现的，AQS和Condition各自维护不同的对象，在使用Lock和Condition时其实就是两个队列的相互移动。
         它所提供的共享锁，互斥锁都是基于对state的操作。可重入性是因为实现了同步器Sync，在Sync的两个实现类中，包括了公平锁和非公平锁。Sync继承了AbstractQueuedSynchronizer。
     + AQS   
-        ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/aqs.png)
+        ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/aqs.png)
         AQS 是 AbstractQueuedSynchronizer(抽象队列同步器：同步状态(state) + FIFO线程等待队列)的缩写，几乎所有的Lock都是基于AQS实现，其底层采用了大量的CAS操作提供乐观锁服务，在冲突的时候进行自旋进行重试，以实现轻量和高效的获取锁。
         独享锁中state=0代表为获取锁，state=1代表获取到锁。   
         共享锁中state的值代表锁的数量。   
         可重入锁的state代表重入的次数。   
         读写锁比较特殊，因 state 是 int 类型的变量，为 32 位，所以采取了中间切割的方式，高 16 位标识读锁的数量 ，低 16 位标识写锁的数量。    
         AQS的实现为CLH:   
-        ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/clh.png) 
+        ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/clh.png) 
         CLH是一种基于链表，可扩展，高性能，公平的自旋锁。代码中相当于虚构了一个链表结构，由AtomicReference的getAndSet进行链接，getAndSet获取到当前元素，设置新元素。     
         ```java
             public class CLHLock implements Lock {
