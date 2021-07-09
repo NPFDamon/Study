@@ -8,13 +8,13 @@
 - [ ] [StringBuffer](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/String.md)   
 - [ ] [StringBuilder](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/String.md)   
 + **并发编程**   
-- [ ] [volatile](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
-- [ ] [synchronized](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
-- [ ] [lock](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
-- [ ] [ReentrantLock](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
-- [ ] [CAS](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
-- [ ] [AQS](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
-- [ ] [JMM](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/juc.md)
+- [ ] [volatile](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/jmm.md)
+- [x] [synchronized](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/lock.md)
+- [x] [lock](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/lock.md)
+- [x] [ReentrantLock](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/lock.md)
+- [x] [CAS](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/lock.md)
+- [x] [AQS](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/lock.md)
+- [ ] [JMM](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/jmm.md)
 + [**多线程**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/thread.md)   
 - [ ] 线程
 - [ ] 线程池
