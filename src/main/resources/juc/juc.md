@@ -145,6 +145,6 @@
       3.最后提供lock(),unlock()方法，实际的类中会实现 Lock 接口中的相应方法，这里为了简化直接自定义这样两个方法。
       CAS是compareAndSet的缩写，应用为对一个值进行更新时，会传入两个值，一个是预期值，一个是需要更新的值，当预期值和被更新的值相同时，进行更新操作。
       CAS操作使用到了Unsafe类，调用了本地方法Unsafe.compareAndSwapInt 比较交换方法。（CAS有可能出现ABA问题）。
-      
+    > https://bugstack.cn/interview/2020/11/04/%E9%9D%A2%E7%BB%8F%E6%89%8B%E5%86%8C-%E7%AC%AC16%E7%AF%87-%E7%A0%81%E5%86%9C%E4%BC%9A%E9%94%81-ReentrantLock%E4%B9%8B%E5%85%AC%E5%B9%B3%E9%94%81%E8%AE%B2%E8%A7%A3%E5%92%8C%E5%AE%9E%E7%8E%B0.html
 
     
