@@ -45,14 +45,14 @@
     值得注意的是：这里说的两个操作既可以是在一个线程之内，也可以是在不同线程之间。还有就是这两个操作并不是说一定要一前一后执行，Happens-before 只要求第一个操作的结果对第二个操作可见，并且第一个操作排在第二个操作之前就可以。
     简单点来说就是：Happens-before 就是可见性规则；什么情况下对共享变量的写，可以对共享变量的读是可见的。
     happens-before 规则：   
-        * 程序次序法则：线程中的每个动作A都Happens-Before该线程中的没一个动作B。其中，在程序中，所有的动作B都能出现在A之后。   
-        * 监视器锁法则：对一个监视器锁的解锁 happens-before于每一个后续对同一监视器锁的加锁。   
-        * volatile变量法则：对volatile域的写入操作happens-before于每一个后续对同一个域的读写操作。   
-        * 线程启动法则：在一个线程里，对Thread.start的调用会happens-before于每个启动线程的动作。   
-        * 线程终结法则：线程中的任何动作都happens-before于其他线程检测到这个线程已经终结、或者从Thread.join调用中成功返回，或Thread.isAlive返回false。   
-        * 中断法则：一个线程调用另一个线程的interrupt happens-before于被中断的线程发现中断。   
-        * 终结法则：一个对象的构造函数的结束happens-before于这个对象finalizer的开始。   
-        * 传递性：如果A happens-before于B，且B happens-before于C，则A happens-before于C   
+    * 程序次序法则：线程中的每个动作A都Happens-Before该线程中的没一个动作B。其中，在程序中，所有的动作B都能出现在A之后。   
+    * 监视器锁法则：对一个监视器锁的解锁 happens-before于每一个后续对同一监视器锁的加锁。   
+    * volatile变量法则：对volatile域的写入操作happens-before于每一个后续对同一个域的读写操作。   
+    * 线程启动法则：在一个线程里，对Thread.start的调用会happens-before于每个启动线程的动作。   
+    * 线程终结法则：线程中的任何动作都happens-before于其他线程检测到这个线程已经终结、或者从Thread.join调用中成功返回，或Thread.isAlive返回false。   
+    * 中断法则：一个线程调用另一个线程的interrupt happens-before于被中断的线程发现中断。   
+    * 终结法则：一个对象的构造函数的结束happens-before于这个对象finalizer的开始。   
+    * 传递性：如果A happens-before于B，且B happens-before于C，则A happens-before于C   
 + volatile 关键字   
     * 保证数据的可见性。被volatile关键字修饰的变量对所有的线程都是可见的。被volatile关键字修饰的变量在修改时，内存操作上会强制刷新到主内存。   
         被volatile关键字修饰后，在程序被反编译成汇编指令后会增加lock操作。   
@@ -63,10 +63,10 @@
     * 指令重排序。Java编译器，运行时和处理器都会保证单线程下的as-if-serial语义。as-if-serial语义的意思是所有的动作都可以为了优化而被重排序，但必须保证重排序
         后的结果和程序代码本身的结果是一致的。Java使用内存屏障来保证紧张指令的重排序。   
         内存屏障可以分为：   
-            * LoadLoad屏障：对于这样的语句Load1; LoadLoad; Load2，在Load2及后续读取操作要读取的数据被访问前，保证Load1要读取的数据被读取完毕。   
-            * StoreStore屏障：对于这样的语句Store1; StoreStore; Store2，在Store2及后续写入操作执行前，保证Store1的写入操作对其它处理器可见。   
-            * LoadStore屏障：对于这样的语句Load1; LoadStore; Store2，在Store2及后续写入操作被刷出前，保证Load1要读取的数据被读取完毕。   
-            * StoreLoad屏障：对于这样的语句Store1; StoreLoad; Load2，在Load2及后续所有读取操作执行前，保证Store1的写入对所有处理器可见。它的开销是四种屏障中最大的。在大多数处理器的实现中，这个屏障是个万能屏障，兼具其它三种内存屏障的功能。   
+        * LoadLoad屏障：对于这样的语句Load1; LoadLoad; Load2，在Load2及后续读取操作要读取的数据被访问前，保证Load1要读取的数据被读取完毕。   
+        * StoreStore屏障：对于这样的语句Store1; StoreStore; Store2，在Store2及后续写入操作执行前，保证Store1的写入操作对其它处理器可见。   
+        * LoadStore屏障：对于这样的语句Load1; LoadStore; Store2，在Store2及后续写入操作被刷出前，保证Load1要读取的数据被读取完毕。   
+        * StoreLoad屏障：对于这样的语句Store1; StoreLoad; Load2，在Load2及后续所有读取操作执行前，保证Store1的写入对所有处理器可见。它的开销是四种屏障中最大的。在大多数处理器的实现中，这个屏障是个万能屏障，兼具其它三种内存屏障的功能。   
     * volatile保证指令重排序是：   
         * 在每个volatile写操作的前面插入一个StoreStore屏障。   
         * 在每个volatile写操作的后面插入一个StoreLoad屏障。   
