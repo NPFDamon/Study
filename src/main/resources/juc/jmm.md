@@ -103,8 +103,8 @@
     ```
     * loadFence()该方法之前所有的load操作在内存屏障之前完成。
     * storeFence()该方法之前所有的store操作在内存屏障之前完成。
-    * fullFence()该方法之前所有的load，store材质在内存屏障之前完成。
-    总结：
+    * fullFence()该方法之前所有的load，store材质在内存屏障之前完成。   
++ 总结：
     * 被volatile修饰的变量，在修改其值时，在内存操作上会强制把新值刷入到主内存。JMM会把该线程对应的CPU内存设置过期,从主内存读取新值。
     * volatile防止指令重排序是内存屏障，来保证重排序是不把内存屏障之后的指令重新排序到内存屏障之前。   
     * volatile不能保证原子性，要解决原子性的问题需要synchronzied 或者 lock。
