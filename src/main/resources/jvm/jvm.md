@@ -3,9 +3,7 @@
     
 + **类加载**   
     ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/class_loading.png)  
-    
-    ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/class_loading_1.png)  
-    
+        
     JVM类加载分为：加载,链接,初始化,使用,卸载。其中链接又包括：验证,准备,解析。   
     * **加载**：Java虚拟机规范对class文件格式进行了严格的规则，但是对于从哪里加载class文件，却非常自由。Java虚拟机可以从文件系统中读取，可以从
     Jar(或者ZIP)压缩包中提取class。除此之外还可以从网络下载，数据库加载甚至是运行时直接生成class文件。   

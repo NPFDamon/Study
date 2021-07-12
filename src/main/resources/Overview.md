@@ -19,12 +19,11 @@
 - [ ] 线程
 - [ ] 线程池
 + [**JVM**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)   
-- [ ] GC优化
-- [ ] JVM内存
-- [ ] 类对象分析
-- [ ] new Object时都做了什么
-- [ ] 运行时数据区
-- [ ] JVM内存模型及GC算法
+- [x] [GC优化](https://tech.meituan.com/2017/12/29/jvm-optimize.html)
+- [x] JVM内存
+- [x] 类对象分析
+- [x] 运行时数据区
+- [x] JVM内存模型及GC算法
 + [**设计模式**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/dp/dp.md)   
 - [ ] 设计模式6大准则
 - [ ] 创建型模式
