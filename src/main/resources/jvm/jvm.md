@@ -48,7 +48,7 @@
     * 双亲委派模式的破坏：   
     在Java应用中存在着很多服务提供者接口（Service Provider Interface，SPI），这些接口允许第三方为它们提供实现，如常见的 SPI 有 JDBC、JNDI等，这些 SPI 的接口属于 Java 核心库，
     一般存在rt.jar包中，由Bootstrap类加载器加载。而Bootstrap类加载器无法直接加载SPI的实现类，同时由于双亲委派模式的存在，Bootstrap类加载器也无法反向委托AppClassLoader加载器SPI的实现类。
-    在这种情况下，我们就需要一种特殊的类加载器来加载第三方的类库，而线线程上下文类加载器（context class loader）（双亲委派模型的破坏者）就是很好的选择。
+    在这种情况下，我们就需要一种特殊的类加载器来加载第三方的类库，而线线程上下文类加载器（context class loader）（双亲委派模型的破坏者）就是很好的选择。   
     ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/thread_classloader.png)    
 + **JVM内存模型**   
     ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm_memory.png)   
@@ -88,15 +88,15 @@
     * 引用计数器：为每一个对象添加一个引用计数器，统计指向该对象的引用次数。当一个对象有相应的引用更新操作时，则对目标的引用计数器进行增减；一旦当一个对象的
     计数器为0时,标识该对象已经死亡，可以被销毁。引用计数器在处理相互依赖，循环依赖时，可能会存在不在使用但又不能被回收的对象，造成内存泄露(A引用B,B引用A)。
     * 可达性分析：通过定义一系列GC-Roots根节点作为起始节点，从此节点出发，穷举该节点引用到的全部对象填充到集合中。当所有节点被标记完成之后，没有被标记的对象就是可以被回收的对象。
-    GC-Roots包括：
-    * 全局性引用，对静态变量常量的引用
-    * 执行上下文，对java方法帧栈中的局部对象的引用；对JNI handlers（Native方法）对象的引用
-    * 已启用且未停用的线程。
+        GC-Roots包括：
+        * 全局性引用，对静态变量常量的引用
+        * 执行上下文，对java方法帧栈中的局部对象的引用；对JNI handlers（Native方法）对象的引用
+        * 已启用且未停用的线程。   
     引用：   
-    强引用：如果一个对象被强引用,垃圾回收器不会回收它，即使抛出OutOfMemoryError，使程序异常终止，也不会靠随意回收具有强引用的对象来解决内存不足问题。   
-    软引用：可以通过java.lang.ref.SoftReference使用软引用。在内存足够时，不会被回收,只有在内存不足时，才会回收软引用对象。如果回收了之后仍没有足够内存才会抛出内存溢出异常。   
-    弱引用：无论内存是否足够,只要JVM进行垃圾回收，就会对弱引用的对象进行回收.可以用java.lang.ref.WeakReference使用弱引用(ThreadLocal的Key使用的就是弱引用)。   
-    虚引用：虚引用是最弱的一种关系，虚引用并不会觉得对象的生命周期。如果一个对象仅持有虚引用，那么它就和没有引用一样,在任何时候都可能被回收。可以用java.lang.ref.PhantomReference使用，它只有一个构造函数和一个 get() 方法，而且它的 get() 方法仅仅是返回一个null，也就是说将永远无法通过虚引用来获取对象，虚引用必须要和 ReferenceQueue 引用队列一起使用，它的作用在于跟踪垃圾回收过程。      
+    **强引用**：如果一个对象被强引用,垃圾回收器不会回收它，即使抛出OutOfMemoryError，使程序异常终止，也不会靠随意回收具有强引用的对象来解决内存不足问题。   
+    **软引用**：可以通过java.lang.ref.SoftReference使用软引用。在内存足够时，不会被回收,只有在内存不足时，才会回收软引用对象。如果回收了之后仍没有足够内存才会抛出内存溢出异常。   
+    **弱引用**：无论内存是否足够,只要JVM进行垃圾回收，就会对弱引用的对象进行回收.可以用java.lang.ref.WeakReference使用弱引用(ThreadLocal的Key使用的就是弱引用)。   
+    **虚引用**：虚引用是最弱的一种关系，虚引用并不会觉得对象的生命周期。如果一个对象仅持有虚引用，那么它就和没有引用一样,在任何时候都可能被回收。可以用java.lang.ref.PhantomReference使用，它只有一个构造函数和一个 get() 方法，而且它的 get() 方法仅仅是返回一个null，也就是说将永远无法通过虚引用来获取对象，虚引用必须要和 ReferenceQueue 引用队列一起使用，它的作用在于跟踪垃圾回收过程。      
 + **垃圾回收算法**   
     * 标记清除算法   
     ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/mark-sweep.png)   
