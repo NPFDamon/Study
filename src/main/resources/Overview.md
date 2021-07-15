@@ -16,8 +16,8 @@
 - [x] [AQS](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/lock.md)
 - [x] [JMM](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/jmm.md)
 + [**多线程**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/thread.md)   
-- [ ] 线程
-- [ ] 线程池
+- [x] 线程
+- [x] 线程池
 + [**JVM**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jvm/jvm.md)   
 - [x] [GC优化](https://tech.meituan.com/2017/12/29/jvm-optimize.html)
 - [x] JVM内存
