@@ -60,12 +60,12 @@
     线程启动方法start(),在它的方法英文注释中已经把核心内容描述出来。Causes this thread to begin execution; the Java Virtual Machine calls the run method of this thread.
     这段话的意思是:由JVM调用此线程的run方法，使线程开始执行。是一个JVN的回调过程。group.add(this)是把当前线程加入线程租ThreadGroup。start0()是一个native方法。
     线程启动的流程为：   
-    1、java创建线程和启动；
-    2、调用本地方法start0()；
-    3、JVM中的JVM_StartThread的创建和启动；
-    4、设置线程状态等特被唤醒；
-    5、根据不同的OS启动线程并唤醒；
-    6、最后回调run方法启动Java线程；
+    1、java创建线程和启动；   
+    2、调用本地方法start0()；   
+    3、JVM中的JVM_StartThread的创建和启动；   
+    4、设置线程状态等特被唤醒；   
+    5、根据不同的OS启动线程并唤醒；   
+    6、最后回调run方法启动Java线程；   
     start()方法和run()方法的区别：   
     start()方法是新创建一个线程，并处于Ready状态，并且在run方法中的代码将在新线程中执行；直接调用run()方法时并不会新创建线程，而是在当前线程执行。   
 + **线程池**        
@@ -128,8 +128,8 @@
   可以延迟定时执行，有点像定时任务。同样是一个无限大小（Integer.MAX_VALUE）的线程池，可能造成OOM。   
   **线程池参数配置**   
   ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/thread_pool_params.png)   
-  IO密集型：
-  CPU密集型：核心线程数为：cpu核心数+1。为什么加一：即使当计算（CPU）密集型的线程偶尔由于页缺失故障或者其他原因而暂停时，这个“额外”的线程也能确保 CPU 的时钟周期不会被浪费。
+  [IO密集型：](https://www.cnblogs.com/thisiswhy/p/12690630.html)   
+  CPU密集型：核心线程数为：cpu核心数+1。为什么加一：即使当计算（CPU）密集型的线程偶尔由于页缺失故障或者其他原因而暂停时，这个“额外”的线程也能确保 CPU 的时钟周期不会被浪费。   
   [**线程参数动态化**](https://tech.meituan.com/2020/04/02/java-pooling-pratice-in-meituan.html)   
   JDK中setCorePoolSize方法：   
    ```java
@@ -190,7 +190,7 @@
                 interruptIdleWorkers();
         }
     ```
-  首先校验参数合法性；然后用传递过来的值覆盖原来的值，判断工作线程是否大于最大线程数，如果大于则对其进行中断操作。
+  首先校验参数合法性；然后用传递过来的值覆盖原来的值，判断工作线程是否大于最大线程数，如果大于则对其进行中断操作。   
   线程池预热：   
   全部启动：   
   ```java
