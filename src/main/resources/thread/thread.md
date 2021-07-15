@@ -68,6 +68,7 @@
     6、最后回调run方法启动Java线程；   
     start()方法和run()方法的区别：   
     start()方法是新创建一个线程，并处于Ready状态，并且在run方法中的代码将在新线程中执行；直接调用run()方法时并不会新创建线程，而是在当前线程执行。   
+## 线程池   
 + **线程池**        
     线程池是一种池化思想的线程管理工具。其核心目的是资源利用，避免重复创建线程带来的资源消耗。   
     ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/thread-pool.png)  
