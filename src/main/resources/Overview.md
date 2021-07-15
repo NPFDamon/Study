@@ -1,12 +1,12 @@
 ## Java
 + **JDK源码**   
-- [ ] [Hashmap](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/Map.md)   
-- [ ] [ThreadLocal](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/ThreadLocal.md)   
-- [ ] [ArrayList](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/List.md)   
-- [ ] [LinkedList](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/List.md)   
-- [ ] [String](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/String.md)   
-- [ ] [StringBuffer](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/String.md)   
-- [ ] [StringBuilder](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/String.md)   
+- [x] [Hashmap](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/Map.md)   
+- [x] [ThreadLocal](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/ThreadLocal.md)   
+- [x] [ArrayList](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/List.md)   
+- [x] [LinkedList](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/List.md)   
+- [x] [String](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/String.md)   
+- [x] [StringBuffer](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/String.md)   
+- [x] [StringBuilder](https://github.com/NPFDamon/Study/blob/main/src/main/resources/jdk/String.md)   
 + **并发编程**   
 - [x] [volatile](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/jmm.md)
 - [x] [synchronized](https://github.com/NPFDamon/Study/blob/main/src/main/resources/juc/lock.md)
