@@ -30,10 +30,10 @@
 - [ ] 结构型模式
 - [ ] 行为模式
 + [**反射，代理**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/rp/rp.md)
-- [ ] 怎么实现反射调用
-- [ ] 怎么代理一个类
-- [ ] 类代理的原理
-- [ ] 代理框架
+- [x] 怎么实现反射调用
+- [x] 怎么代理一个类
+- [x] 类代理的原理
+- [x] 代理框架
 + [**IO**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/io.md)
 - [x] AIO,NIO,BIO
 - [x] Netty
