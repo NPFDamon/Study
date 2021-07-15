@@ -90,14 +90,16 @@
     Executors.newScheduledThreadPool(10);
     Executors.newSingleThreadExecutor();
     ```
-  * corePoolSize：核心线程数量；   
+  * corePoolSize：核心线程数量，allowCoreThreadTimeOut控制核心线程数量在空闲时是否会被销毁，默认为false不会被销毁，如果设置为true线程会受到keepAliveTime控制而销毁；   
   * maximumPoolSize：最大线程数；   
   * keepAliveTime：多余的空闲线程的存活时间，当线程数量的大小超过corePoolSize，当线程空闲时间超过keepAliveTime时，多余的线程会被销毁，直到corePoolSize个线程为止。
   默认情况下，只有当线程池中的数量大于corePoolSize时，keepAliveTime才会起作用，直到线程池中的线程不大于corePoolSize。   
   * unit：keepAliveTime的单位；   
   * workQueue：任务阻塞队列；    
+  ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/queue.png)   
   * threadFactory：线程工厂；生成线程池中线程的工厂，用于创建线程的一般默认认可；   
   * handler：拒绝策略；当队列满了且工作线程大于等于maximumPoolSize时，会执行相关拒绝策略；   
+  ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/policy.png)   
   线程池执行流程：   
   1、检查线程池状态，如果不是Running直接拒绝，线程池必须保证running状态下才能进行；   
   2、如果工作线程小于corePoolSize，直接创建线程来执行任务；   
@@ -112,4 +114,141 @@
   TIDYING：所以任务都已经终止，工作线程为0，线程进入该状态后会调用terminated()方法进入terminated状态；   
   TERMINATED：终止状态，terminated()方法调用后的终止状态；   
   JDK提供的默认线程池：   
-  
+  * newFixedThreadPool:   
+  代码：new ThreadPoolExecutor(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>())   
+  创建一个固定大小可重复使用的线程池，以LinkedBlockingQueue为无界阻塞队列存放等待线程。随着线程不能被执行的无限堆积，可能造成OOM。
+  * newSingleThreadExecutor:   
+  代码：new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>())   
+  只创建一个执行任务的线程的线程池，如果出现意外终止再创建一个。同样是LinkedBlockingQueue无界阻塞队列，可能造成OOM。
+  * newCachedThreadPool:   
+  代码：new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>())   
+  SynchronousQueue是一个生产消费模式的阻塞队列，只要有任务就需要有线程执行，线程池中的线程可重复使用，如果线程比较耗时，会大量创建线程，会导致OOM。
+  * newScheduledThreadPool:   
+  代码：public ScheduledThreadPoolExecutor(int corePoolSize) { super(corePoolSize, Integer.MAX_VALUE, 0, NANOSECONDS, new ScheduledThreadPoolExecutor.DelayedWorkQueue()); }   
+  可以延迟定时执行，有点像定时任务。同样是一个无限大小（Integer.MAX_VALUE）的线程池，可能造成OOM。   
+  **线程池参数配置**   
+  ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/thread_pool_params.png)   
+  IO密集型：
+  CPU密集型：核心线程数为：cpu核心数+1。为什么加一：即使当计算（CPU）密集型的线程偶尔由于页缺失故障或者其他原因而暂停时，这个“额外”的线程也能确保 CPU 的时钟周期不会被浪费。
+  [**线程参数动态化**](https://tech.meituan.com/2020/04/02/java-pooling-pratice-in-meituan.html)   
+  JDK中setCorePoolSize方法：   
+   ```java
+    /**
+         * Sets the core number of threads.  This overrides any value set
+         * in the constructor.  If the new value is smaller than the
+         * current value, excess existing threads will be terminated when
+         * they next become idle.  If larger, new threads will, if needed,
+         * be started to execute any queued tasks.
+         *
+         * @param corePoolSize the new core size
+         * @throws IllegalArgumentException if {@code corePoolSize < 0}
+         * @see #getCorePoolSize
+         */
+        public void setCorePoolSize(int corePoolSize) {
+            if (corePoolSize < 0)
+                throw new IllegalArgumentException();
+            int delta = corePoolSize - this.corePoolSize;
+            this.corePoolSize = corePoolSize;
+            if (workerCountOf(ctl.get()) > corePoolSize)
+                interruptIdleWorkers();
+            else if (delta > 0) {
+                // We don't really know how many new threads are "needed".
+                // As a heuristic, prestart enough new workers (up to new
+                // core size) to handle the current number of tasks in
+                // queue, but stop if queue becomes empty while doing so.
+                int k = Math.min(delta, workQueue.size());
+                while (k-- > 0 && addWorker(null, true)) {
+                    if (workQueue.isEmpty())
+                        break;
+                }
+            }
+        }
+    ```
+  在运行期间调用此方法设置corePoolSize之后，线程池会覆盖原来的corePoolSize值，并且根据当前值和原始值的比较结果，采取不同的策略处理。   
+  当覆盖之后的corePoolSize小于工作线程，说明有多余的worker线程，此时会向当前空闲的worker线程发起中断请求以实现回收，多余的worker在下次空闲时也会回收。   
+  对于当前值大于原始值，且队列中有待执行的任务，则线程池会新建worker线程执行任务。    
+  ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/thread/thread_pool_setCore.png)    
+  JDK中setMaximumPoolSize方法：   
+  ```java
+     /**
+         * Sets the maximum allowed number of threads. This overrides any
+         * value set in the constructor. If the new value is smaller than
+         * the current value, excess existing threads will be
+         * terminated when they next become idle.
+         *
+         * @param maximumPoolSize the new maximum
+         * @throws IllegalArgumentException if the new maximum is
+         *         less than or equal to zero, or
+         *         less than the {@linkplain #getCorePoolSize core pool size}
+         * @see #getMaximumPoolSize
+         */
+        public void setMaximumPoolSize(int maximumPoolSize) {
+            if (maximumPoolSize <= 0 || maximumPoolSize < corePoolSize)
+                throw new IllegalArgumentException();
+            this.maximumPoolSize = maximumPoolSize;
+            if (workerCountOf(ctl.get()) > maximumPoolSize)
+                interruptIdleWorkers();
+        }
+    ```
+  首先校验参数合法性；然后用传递过来的值覆盖原来的值，判断工作线程是否大于最大线程数，如果大于则对其进行中断操作。
+  线程池预热：   
+  全部启动：   
+  ```java
+     /**
+         * Starts all core threads, causing them to idly wait for work. This
+         * overrides the default policy of starting core threads only when
+         * new tasks are executed.
+         *
+         * @return the number of threads started
+         */
+        public int prestartAllCoreThreads() {
+            int n = 0;
+            while (addWorker(null, true))
+                ++n;
+            return n;
+        }
+    ```
+  只启动一个：   
+  ```java
+     /**
+         * Starts a core thread, causing it to idly wait for work. This
+         * overrides the default policy of starting core threads only when
+         * new tasks are executed. This method will return {@code false}
+         * if all core threads have already been started.
+         *
+         * @return {@code true} if a thread was started
+         */
+        public boolean prestartCoreThread() {
+            return workerCountOf(ctl.get()) < corePoolSize &&
+                addWorker(null, true);
+        }
+    ```
+  设置核心线程被回收：   
+  ```java
+    /**
+         * Sets the policy governing whether core threads may time out and
+         * terminate if no tasks arrive within the keep-alive time, being
+         * replaced if needed when new tasks arrive. When false, core
+         * threads are never terminated due to lack of incoming
+         * tasks. When true, the same keep-alive policy applying to
+         * non-core threads applies also to core threads. To avoid
+         * continual thread replacement, the keep-alive time must be
+         * greater than zero when setting {@code true}. This method
+         * should in general be called before the pool is actively used.
+         *
+         * @param value {@code true} if should time out, else {@code false}
+         * @throws IllegalArgumentException if value is {@code true}
+         *         and the current keep-alive time is not greater than zero
+         *
+         * @since 1.6
+         */
+        public void allowCoreThreadTimeOut(boolean value) {
+            if (value && keepAliveTime <= 0)
+                throw new IllegalArgumentException("Core threads must have nonzero keep alive times");
+            if (value != allowCoreThreadTimeOut) {
+                allowCoreThreadTimeOut = value;
+                if (value)
+                    interruptIdleWorkers();
+            }
+        }
+    ```
