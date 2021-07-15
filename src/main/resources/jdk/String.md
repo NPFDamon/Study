@@ -1,0 +1,1 @@
+## [String](https://bugstack.cn/interview/2020/09/17/%E9%9D%A2%E7%BB%8F%E6%89%8B%E5%86%8C-%E7%AC%AC11%E7%AF%87-StringBuilder-%E6%AF%94-String-%E5%BF%AB-%E7%A9%BA%E5%98%B4%E7%99%BD%E7%89%99%E7%9A%84-%E8%AF%81%E6%8D%AE%E5%91%A2.html)

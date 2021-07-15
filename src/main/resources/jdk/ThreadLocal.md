@@ -1,2 +1,2 @@
-## ThreadLocal
+## [ThreadLocal](https://bugstack.cn/interview/2020/09/23/%E9%9D%A2%E7%BB%8F%E6%89%8B%E5%86%8C-%E7%AC%AC12%E7%AF%87-%E9%9D%A2%E8%AF%95%E5%AE%98-ThreadLocal-%E4%BD%A0%E8%A6%81%E8%BF%99%E4%B9%88%E9%97%AE-%E6%88%91%E5%B0%B1%E6%8C%82%E4%BA%86.html)
    对于同一个事物(变量，key)在不同的线程中维护不同的值，在不同线程中同一key拿到的值是不同的。
