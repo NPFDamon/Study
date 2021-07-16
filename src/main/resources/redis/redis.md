@@ -184,4 +184,8 @@
     auto-aof-rewrite-percentage 0
     ```
     Redis 2.4以上才可以自动进行日志重写，之前的版本需要手动运行BGREWRITEAOF这个命令。
++ **Redis线程模型**    
+    Redis是基于IO多路复用的Reactor线程模型。在Redis 6.0之前Redis使用单线程的Reactor线程模型，即网络IO请求模块使用单线程来处理，其他模块仍是多线程。
+    因为Redis是纯内存操作，CPU并不是Redis的性能瓶颈，单线程也可以有很高的性能,但是单线程无法发挥出多核CPU的性能。
+    在Redis 6.0之后，Redis采用多线程Reactor线程模型，使用多线程IO多路复用器，充分利用CPU资源,减少网络IO代理的性能损耗。
   

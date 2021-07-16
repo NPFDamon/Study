@@ -40,15 +40,14 @@
 ---
 ## Redis
 + [**命令**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/redis/redis.md)   
-- [ ] 计数
-- [ ] 排序
-- [ ] 加锁
+- [x] 常用命令
 + [**架构**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/redis/redis.md)  
-- [ ] 常用数据类型
-- [ ] 数据淘汰策略
-- [ ] Redis为什么快
-- [ ] 持久化
-+ [**应用**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/redis/redis.md)   
+- [x] 常用数据类型
+- [x] 数据淘汰策略
+- [x] Redis为什么快
+- [x] 持久化
++ [**应用**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/redis/redis_0.md)   
+- [ ] Redis锁
 - [ ] 缓存雪崩，缓存穿透，缓存击穿，缓存预热，缓存更新，缓存降级
 - [ ] Pipeline
 - [ ] Redis集群
