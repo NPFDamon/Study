@@ -46,7 +46,7 @@
 - [x] 数据淘汰策略
 - [x] Redis为什么快
 - [x] 持久化
-+ [**应用**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/redis/redis.md)   
++ **应用**  
 - [x] [Redis锁](https://github.com/NPFDamon/Study/blob/main/src/main/resources/redis/redis_0.md)   
 - [x] [缓存雪崩，缓存穿透，缓存击穿，缓存预热，缓存更新，缓存降级](https://github.com/NPFDamon/Study/blob/main/src/main/resources/redis/redis_0.md)   
 - [x] [Pipeline](https://github.com/NPFDamon/Study/blob/main/src/main/resources/redis/redis_1.md)   
