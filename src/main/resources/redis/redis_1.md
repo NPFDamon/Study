@@ -47,3 +47,6 @@
     min-slaves-max-lag 10
     要求至少有一个salve，数据同步和延迟不能超过10s，如果超过一个salve数据复制和同步都超过10s,这时master不接受任何请求。
     [Redis节点数量问题(* 不一定准确 *)](https://cloud.tencent.com/developer/article/1535967)   
+    [Redis选举和Raft算法](https://www.cnblogs.com/myd620/p/7811156.html)
++ [**Redis 管道（Pipelining）**](https://www.huaweicloud.com/articles/70e7811129c8f1061e64862a8d3f6e79.html)   
+    Pipelining是将一组命令进行打包，然后一次性通过网络发送给Redis，同时将返回的结果批量返回。
