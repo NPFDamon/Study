@@ -86,14 +86,14 @@ public class BinaryTree {
         List<TreeNode> treeNodes = new ArrayList<TreeNode>();
         TreeNode curr = head;
         while (!stack.isEmpty() || curr != null) {
-            while (curr != null){
+            while (curr != null) {
                 stack.push(curr);
                 curr = curr.left;
             }
             TreeNode node = stack.pop();
             System.out.println(node.value);
             treeNodes.add(node);
-            if(node.right != null){
+            if (node.right != null) {
                 curr = node.right;
             }
         }
@@ -121,7 +121,7 @@ public class BinaryTree {
      * 后续遍历迭代法
      *
      * @param head 头结点
-     * @return  4 5 2 6 7 3 1
+     * @return 4 5 2 6 7 3 1
      */
     public static List<TreeNode> after_Iteration(TreeNode head) {
         if (head == null) {
@@ -133,15 +133,15 @@ public class BinaryTree {
         while (!stack1.isEmpty()) {
             TreeNode node = stack1.pop();
             stack2.push(node);
-            if(node.left != null){
+            if (node.left != null) {
                 stack1.push(node.left);
             }
-            if(node.right != null){
+            if (node.right != null) {
                 stack1.push(node.right);
             }
         }
         List<TreeNode> treeNodes = new ArrayList<TreeNode>();
-        while (!stack2.isEmpty()){
+        while (!stack2.isEmpty()) {
 //            treeNodes.add(stack2.pop());
             System.out.println(stack2.pop().value);
         }
@@ -150,26 +150,27 @@ public class BinaryTree {
 
     /**
      * 二叉树层级遍历
+     *
      * @param head head
      * @return 1 2 3 4 5 6 7
      */
-    public static List<TreeNode> layerTree(TreeNode head){
-        if(head == null){
+    public static List<TreeNode> layerTree(TreeNode head) {
+        if (head == null) {
             return null;
         }
         Queue<TreeNode> queue = new ArrayDeque<>();
         queue.add(head);
         List<TreeNode> lay = new ArrayList<>();
-        while (!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             int n = queue.size();
             List<TreeNode> lay1 = new ArrayList<>();
-            for(int i = 0;i< n;i++){
+            for (int i = 0; i < n; i++) {
                 TreeNode node = queue.poll();
                 lay1.add(node);
-                if(node.left != null){
+                if (node.left != null) {
                     queue.add(node.left);
                 }
-                if(node.right != null){
+                if (node.right != null) {
                     queue.add(node.right);
                 }
             }
@@ -179,11 +180,66 @@ public class BinaryTree {
     }
 
     /**
+     * 二叉树翻转
+     *
+     * @param head tree node
+     * @return 翻转后的二叉树
+     */
+    public static TreeNode invertTree(TreeNode head) {
+        if (head == null) {
+            return head;
+        }
+
+        TreeNode tempNode = head.right;
+        head.right = head.left;
+        head.left = tempNode;
+
+        invertTree(head.left);
+        invertTree(head.right);
+
+        return head;
+    }
+
+
+    /**
+     * 翻转二叉树（https://github.com/NPFDamon/Study/blob/main/src/main/java/redis/bitmap.png）
+     *
+     * @param head tree node
+     * @return 翻转后的二叉树
+     */
+    public static TreeNode invertTree_Iteration(TreeNode head) {
+        if (head == null) {
+            return head;
+        }
+
+        //节点队列
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        //将二叉树的节点放入队列
+        queue.add(head);
+        while (!queue.isEmpty()) {
+            //二叉树左右互换
+            TreeNode node = queue.poll();
+            TreeNode tempNode = node.right;
+            node.right = node.left;
+            node.left = tempNode;
+            //互换后的节点放入队列
+            if (node.left != null) {
+                queue.add(node.left);
+            }
+            if (node.right != null) {
+                queue.add(node.right);
+            }
+        }
+
+        return head;
+    }
+
+    /**
      * 二叉树节点
-     *        1
-     *      /  \
-     *    2     3
-     *  /  \   / \
+     * 1
+     * /  \
+     * 2     3
+     * /  \   / \
      * 4    5 6   7
      */
     public static class TreeNode {
@@ -244,6 +300,9 @@ public class BinaryTree {
 //        List<TreeNode> stack = before_Iteration(head);
 //        List<TreeNode> stack = middle_Iteration(head);
 //        List<TreeNode> stack = after_Iteration(head);
-        List<TreeNode> stack = layerTree(head);
+//        List<TreeNode> stack = layerTree(head);
+//        TreeNode node = invertTree(head);
+        TreeNode node_1 = invertTree_Iteration(head);
+        System.out.println("End");
     }
 }
