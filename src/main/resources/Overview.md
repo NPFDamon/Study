@@ -57,22 +57,7 @@
 ## MySQL
 
 + [**锁**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/lock.md)    
-- [ ] 全局锁   
-- [ ] 表锁   
-- [ ] 行锁   
-- [ ] 乐观锁 
-- [ ] 悲观锁 
-- [ ] 排它锁 
-- [ ] 锁优化  
-+ [**事务**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/trans.md)   
-- [ ] 事务特性ACID   
-- [ ] 脏读   
-- [ ] 幻读   
-- [ ] 幻读   
-- [ ] 不可重复读   
-- [ ] 事务隔离级别   
-- [ ] 分布式事务  
-- [ ] 事务实现原理    
++ [**事务**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/trans.md) 
 + [**日志**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/log.md)   
 - [ ] 慢日志查询   
 - [ ] 错误日志   
