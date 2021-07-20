@@ -202,7 +202,7 @@ public class BinaryTree {
 
 
     /**
-     * 翻转二叉树（https://github.com/NPFDamon/Study/blob/main/src/main/java/redis/bitmap.png）
+     * 翻转二叉树（https://github.com/NPFDamon/Study/blob/main/src/main/java/com/damon/algorithm/pic/invertTree.gif）
      *
      * @param head tree node
      * @return 翻转后的二叉树
