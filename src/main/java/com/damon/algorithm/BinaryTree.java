@@ -1,6 +1,7 @@
 package com.damon.algorithm;
 
 
+import javax.swing.tree.TreeNode;
 import java.util.*;
 
 /**
@@ -234,6 +235,73 @@ public class BinaryTree {
         return head;
     }
 
+    public static boolean isBalance(TreeNode node) {
+        return check(node, node);
+    }
+
+    public static boolean check(TreeNode p, TreeNode q) {
+        //堆栈保存节点
+        Stack<TreeNode> queue = new Stack<>();
+        //节点左右孩子
+        queue.add(p);
+        queue.add(q);
+        while (!queue.isEmpty()) {
+            //节点弹出，判断
+            TreeNode node1 = queue.pop();
+            TreeNode node2 = queue.pop();
+            if (node1 == null && node2 == null) {
+                continue;
+            }
+            if (node1 == null || node2 == null) {
+                return false;
+            }
+            if (!node1.value.equals(node2.value)) {
+                return false;
+            }
+
+            //栈是先进后出，所以压栈操作为倒序压栈
+            //先压栈右节点的左孩子
+            queue.add(node2.left);
+            //压栈左节点的右孩子
+            queue.add(node1.right);
+
+            //压栈右节点的右孩子
+            queue.add(node2.right);
+            //压栈左节点的左孩子
+            queue.add(node1.left);
+            /**
+             * 如果使用数组
+             * //用队列保存节点
+             * 		LinkedList<TreeNode> queue = new LinkedList<TreeNode>();
+             * 		//将根节点的左右孩子放到队列中
+             * 		queue.add(root.left);
+             * 		queue.add(root.right);
+             * 		while(queue.size()>0) {
+             * 			//从队列中取出两个节点，再比较这两个节点
+             * 			TreeNode left = queue.removeFirst();
+             * 			TreeNode right = queue.removeFirst();
+             * 			//如果两个节点都为空就继续循环，两者有一个为空就返回false
+             * 			if(left==null && right==null) {
+             * 				continue;
+             *                        }
+             * 			if(left==null || right==null) {
+             * 				return false;
+             *            }
+             * 			if(left.val!=right.val) {
+             * 				return false;
+             *            }
+             * 			//将左节点的左孩子， 右节点的右孩子放入队列
+             * 			queue.add(left.left);
+             * 			queue.add(right.right);
+             * 			//将左节点的右孩子，右节点的左孩子放入队列
+             * 			queue.add(left.right);
+             * 			queue.add(right.left);
+             */
+
+        }
+        return true;
+    }
+
     /**
      * 二叉树节点
      * 1
@@ -282,11 +350,11 @@ public class BinaryTree {
     public static void main(String[] args) {
         TreeNode head = new TreeNode(1);
         TreeNode left = new TreeNode(2);
-        TreeNode right = new TreeNode(3);
-        TreeNode leftLeft = new TreeNode(4);
-        TreeNode leftRight = new TreeNode(5);
-        TreeNode rightLeft = new TreeNode(6);
-        TreeNode rightRight = new TreeNode(7);
+        TreeNode right = new TreeNode(2);
+        TreeNode leftLeft = new TreeNode(3);
+        TreeNode leftRight = new TreeNode(4);
+        TreeNode rightLeft = new TreeNode(4);
+        TreeNode rightRight = new TreeNode(3);
         head.left = left;
         head.right = right;
         left.left = leftLeft;
@@ -302,7 +370,8 @@ public class BinaryTree {
 //        List<TreeNode> stack = after_Iteration(head);
 //        List<TreeNode> stack = layerTree(head);
 //        TreeNode node = invertTree(head);
-        TreeNode node_1 = invertTree_Iteration(head);
-        System.out.println("End");
+//        TreeNode node_1 = invertTree_Iteration(head);
+        boolean balance = isBalance(head);
+        System.out.println("End :" + balance);
     }
 }
