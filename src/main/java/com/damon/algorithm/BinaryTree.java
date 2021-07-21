@@ -302,6 +302,15 @@ public class BinaryTree {
         return true;
     }
 
+    public static int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = maxDepth(root.left);
+        int right = maxDepth(root.right);
+        return Math.max(left, right) + 1;
+    }
+
     /**
      * 二叉树节点
      * 1
@@ -371,7 +380,8 @@ public class BinaryTree {
 //        List<TreeNode> stack = layerTree(head);
 //        TreeNode node = invertTree(head);
 //        TreeNode node_1 = invertTree_Iteration(head);
-        boolean balance = isBalance(head);
-        System.out.println("End :" + balance);
+//        boolean balance = isBalance(head);
+        int max = maxDepth(head);
+        System.out.println("End :" + max);
     }
 }
