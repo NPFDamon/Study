@@ -58,20 +58,15 @@
 
 + [**锁**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/lock.md)    
 + [**事务**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/trans.md) 
-+ [**日志**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/log.md)   
-- [ ] 慢日志查询   
-- [ ] 错误日志   
-- [ ] redo log 重做日志
-- [ ] binlog 归档日志   
-- [ ] undo log 回档日志   
-+ [**索引**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/index.md)   
-- [ ] 聚集索引   
-- [ ] 非聚集索引   
-- [ ] 最左匹配原则   
-- [ ] 前缀索引   
-+ [**存储引擎**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/engin.md)   
-- [ ] InnoDB   
-- [ ] MyISAM   
++ [**日志**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/mysql.md)   
++ [**索引**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/mysql.md)   
+- [x] 聚集索引   
+- [x] 非聚集索引   
+- [x] 最左匹配原则   
+- [x] 前缀索引   
++ [**存储引擎**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/mysql.md)   
+- [x] InnoDB   
+- [x] MyISAM   
 ---
 ## 框架
 + [**Spring**]()  
