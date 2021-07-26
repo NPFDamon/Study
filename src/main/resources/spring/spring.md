@@ -1,6 +1,6 @@
 ## Spring 
    `自己实现的Spring：https://github.com/NPFDamon/small-spring` 
-+ IOC
++ IOC   
     IOC(Inversion of Control)控制反转，资源的使用不由使用者各自管理，而是交给不使用资源的第三方进行管理。这样做的好处是资源是集中管理的，
     可配置、易维护，同时也降低了双方的依赖度做到了低耦合。   
     Spring的IOC容器主要基于BeanFactory和ApplicationContext两个接口。BeanFactory是Spring IOC的最底层接口，ApplicationContext是其最高级

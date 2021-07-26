@@ -69,11 +69,11 @@
 - [x] MyISAM   
 ---
 ## 框架
-+ [**Spring**]()  
-- [ ] IOC，AOP
-- [ ] Bean注册过程   
-- [ ] Bean定义信息   
-- [ ] Spring事务       
++ [**Spring**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/spring/spring.md)  
+- [x] IOC，AOP
+- [x] Bean注册过程   
+- [x] Bean定义信息   
+- [x] Spring事务       
 + [**Mybatis**]()  
 - [ ] EX
 - [ ] EX 
