@@ -57,7 +57,12 @@ public class Solution {
         return right + 1;
     }
 
-
+    /**
+     * 有序数组的平方
+     *
+     * @param nums
+     * @return
+     */
     public static int[] sortedSquares(int[] nums) {
         int n = nums.length;
 
@@ -76,11 +81,39 @@ public class Solution {
         return ans;
     }
 
+
+    /**
+     * 选择数组
+     * @param nums
+     * @param k
+     * @return
+     */
+    public static int[] rotate(int[] nums, int k) {
+        int n = nums.length;
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i++) {
+            ans[(i + k) % n] = nums[i];
+        }
+//        System.arraycopy(ans, 0, nums, 0, n);
+        return ans;
+    }
+
+
+    public static void rotateSelf(int[] nums, int k) {
+        int n = nums.length;
+        for (int i = 1; i <= k; i++) {
+            int tmp = nums[1];
+            for (int j = 0; j < n; j++) {
+                nums[j + 1] = nums[j];
+            }
+        }
+    }
+
     public static void main(String[] args) {
 //        int[] nums = {-1, 0, 3, 5, 9, 12};
 //        int[] nums = {5};
-        int[] nums = {-4, -1, 0, 3, 10};
-        int[] as = sortedSquares(nums);
+        int[] nums = {-4, -1, 2, 3, 10};
+        int[] as = rotate(nums, 3);
         System.out.println("====>");
     }
 }
