@@ -16,6 +16,39 @@
     ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/spring/application-context.png)    
     >[https://blog.csdn.net/f641385712/article/details/88578656]   
     
+    Spring Bean生命周期：   
+    ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/spring/spring-bean.png)    
+    一个Bean的构造函数初始化时是最先执行的，这个时候，bean属性还没有被注入；   
+    @PostConstruct注解的方法优先于InitializingBean的afterPropertiesSet执行，这时Bean的属性竟然被注入了；   
+    spring很多组件的初始化都放在afterPropertiesSet做,想和spring一起启动，可以放在这里启动;   
+    spring为bean提供了两种初始化bean的方式，实现InitializingBean接口，实现afterPropertiesSet方法，或者在配置文件中同过init-method指定，两种方式可以同时使用；   
+    实现InitializingBean接口是直接调用afterPropertiesSet方法，比通过反射调用init-method指定的方法效率相对来说要高点；但是init-method方式消除了对spring的依赖；   
+    如果调用afterPropertiesSet方法时出错，则不调用init-method指定的方法。   
+    Bean在实例化的过程中：   
+    Constructor > @PostConstruct > InitializingBean > init-method   
+    BeanFactory和FactoryBean区别：   
+    1，两者都是接口。   
+    2，BeanFactory主要是用来创建Bean和获取Bean的。   
+    3，FactoryBean也是一个Bean，由BeanFactory创建，与普通Bean不同，其返回的对象不是指定类的一个实例，而是该FactoryBean的getObject()方法返回的对象。   
+    4，通过beanName从BeanFactory中获取对象时，如果beanName不加'&'则获取到对应的Bean的实例；如果加'&'则获取到FactoryBean实例。   
+    5，FactoryBean通常是用来创建比较复杂的Bean(如创建mybatis的SqlSessionFactory)，一般的bean直接用xml配置即可。但是如果创建一个Bean的过程中
+    涉及到很多其他的Bean和复杂逻辑用xml配置比较困难，这个时候可以考虑用FactoryBean。   
+    Bean的循环依赖：   
+    Bean在创建的时候需要先调用其构造函数进行实例化，然后再进行属性填充,再接着进行附加操作和初始化，正是这样的生命周期，才有了Spring的解决循环依赖，
+    这样的解决机制是根据Spring框架内定义的三级缓存来实现的，也就是说：三级缓存解决了Bean之间的循环依赖。我们从源码中来说明。   
+    ```java
+        /** Cache of singleton objects: bean name to bean instance. */
+    	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
+    
+    	/** Cache of singleton factories: bean name to ObjectFactory. */
+    	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);
+    
+    	/** Cache of early singleton objects: bean name to bean instance. */
+    	private final Map<String, Object> earlySingletonObjects = new HashMap<>(16);
+    ```
+    singletonObjects第一级缓存，存放已经实例化好的单例bean。   
+    earlySingletonObjects第二级缓存，存放已经曝光的单例对象。已经实例化好，但是还没有进行属性赋值。      
+    singletonFactories第三级缓存，存放的是将要被实例化的对象的对象工厂。   
 + AOP   
     在软件业，AOP为Aspect Oriented Programming的缩写，意为：面向切面编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。
     AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑

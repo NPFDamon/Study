@@ -44,10 +44,112 @@
     分区消息顺序指保证某一组消息被顺序执行即可。  
     - 全局顺序   
     对于指定的一个topic所有的消息都按FIFO的顺序进行发布和消费。适用场景：性能要求不高，所有的消息严格按照 FIFO 原则进行消息发布和消费的场景。   
-    - 分区顺序   
-    对于指定一个topic，所有的消息都是按照sharding key进行区块区分。同一个分区区块内的消息严格按照FIFO顺序进行发布和消费。Sharding key是顺序消息
-    中用来区分不同分区额关键字，和普通的消息key是完全不同的概念。    
+    - 局部顺序   
+    指同一个队列的消息有序，可以在发送消息时指定队列，在消费消息时也按顺序消费。例如同一个订单 ID 的消息要保证有序，不同订单的消息没有约束，
+    相互不影响，不同订单 ID 之间的消息时并行的。   
+    
+    **保证消息顺序**同一类消息发送到
+        
     * [消息不丢失](https://www.cnblogs.com/goodAndyxublog/p/12563813.html)
     
+    * 消息发送过程   
+    一条消息从发送到消费，一共经历三个阶段：   
+     ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mq/mq-message.jpeg)   
+     - 生产阶段，Producer新建消息，然后通过网络将消息投递给MQ Broker。   
+     - 存储阶段，消息将会存储在Broker端的磁盘中。   
+     - 消费阶段，Consumer会从Broker中拉取消息进行消费。   
+     
+     - 生产阶段：   
+     生产者（Producer） 通过网络发送消息给 Broker，当Broker收到消息后，将会返回确认相应信息给Producer。所以生产者只有收到确认响应，就代表消息在生产阶段未丢失。   
+     ```java
+      DefaultMQProducer mqProducer=new DefaultMQProducer("test");
+      // 设置 nameSpace 地址
+      mqProducer.setNamesrvAddr("namesrvAddr");
+      mqProducer.start();
+      Message msg = new Message("test_topic" /* Topic */,
+              "Hello World".getBytes(RemotingHelper.DEFAULT_CHARSET) /* Message body */
+      );
+      // 发送消息到一个Broker
+      try {
+          SendResult sendResult = mqProducer.send(msg);
+      } catch (RemotingException e) {
+          e.printStackTrace();
+      } catch (MQBrokerException e) {
+          e.printStackTrace();
+      } catch (InterruptedException e) {
+          e.printStackTrace();
+      }
+     ```
+    `send()`是一个同步操作，只要这个方法不抛出任何异常，就代表消息已经发送成功。  
+    消息发送成功仅代表消息已经到了 Broker 端，Broker 在不同配置下，可能会返回不同响应状态:
+    SendStatus.SEND_OK   
+    SendStatus.FLUSH_DISK_TIMEOUT   
+    SendStatus.FLUSH_SLAVE_TIMEOUT   
+    SendStatus.SLAVE_NOT_AVAILABLE    
+    ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mq/send-message.jpeg)   
+    
+    - 存储阶段   
+    默认情况下，消息只要到了Broker端，将会优先保存到内存中，然后立即返回响应给生产者。随后Broker定期将一组数据从内存异步刷新到磁盘。这种方式的优点是
+    减少IO次数，提高性能，但是如果Broker端发送宕机，则会出现未刷新的数据丢失的问题。      
+    若要保证消息存储端不丢失，保证消息可靠性，可以将消息保存机制改完同步刷新，即消息同步磁盘成功，才会返回成功确认信息。   
+    修改 Broker 端配置如下：
+    `
+    ## 默认情况为 ASYNC_FLUSH 
+    flushDiskType = SYNC_FLUSH
+    ` 
+    
+    若 Broker 未在同步刷盘时间内（默认为 5s）完成刷盘，将会返回 SendStatus.FLUSH_DISK_TIMEOUT 状态给生产者。   
+    集群部署的情况下，Broker通常采用一主多从的部署方式。为了保证消息不丢失，消息还需要复制到slave节点。默认情况下，消息写入master成功，就可以返回
+    给生产者确认信息，接着消息会异步刷新到slave节点。
+    此时若 master 突然宕机且不可恢复，那么还未复制到 slave 的消息将会丢失。   
+    为了提高可用性，可以采用同步复制的方式，master节点将会等到salve节点同步成功才会返回确认信息。   
+    结合生产阶段与存储阶段，若需要严格保证消息不丢失，broker 需要采用如下配置：
+    
+    `
+    ## master 节点配置
+    flushDiskType = SYNC_FLUSH
+    brokerRole=SYNC_MASTER
+    ## slave 节点配置
+    brokerRole=slave
+    flushDiskType = SYNC_FLUSH
+    `
+    这个过程还需要生产者配合，判断返回状态是否为SendStatus.SEND_OK。若是其他状态，就需要考虑补偿重试。   
+    
+    - 消费阶段   
+    消费者从Broker拉取信息，然后执行相关业务逻辑。一旦执行成功，将会返回ConsumeConcurrentlyStatus.CONSUME_SUCCESS 状态给 Broker。   
+    如果Broker未收到确认信息，或收到的信息为其他状态，消费者下次还会拉取这条信息，进行重试。这样有效的避免了消费者消费过程中出现异常,或者消息在网络中丢失的情况。   
+    ```java
+    // 实例化消费者
+    DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("test_consumer");
+    
+    // 设置NameServer的地址
+    consumer.setNamesrvAddr("namesrvAddr");
+    
+    // 订阅一个或者多个Topic，以及Tag来过滤需要消费的消息
+    consumer.subscribe("test_topic", "*");
+    // 注册回调实现类来处理从broker拉取回来的消息
+    consumer.registerMessageListener(new MessageListenerConcurrently() {
+        @Override
+        public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
+            // 执行业务逻辑
+            // 标记该消息已经被成功消费
+            return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+        }
+    });
+    // 启动消费者实例
+    consumer.start();
+    ```
+  以上消费消息过程的，我们需要注意返回消息状态。只有当业务逻辑真正执行成功，我们才能返回 ConsumeConcurrentlyStatus.CONSUME_SUCCESS。
+  否则我们需要返回 ConsumeConcurrentlyStatus.RECONSUME_LATER，稍后再重试。   
+  
+  * 重复消息问题   
+  1，当系统的调用链路比较长的时候，比如系统A调用系统B，系统B再把消息发送到RocketMQ中，在系统A调用系统B的时候，如果系统B处理成功，
+    但是迟迟没有将调用成功的结果返回给系统A的时候，系统A就会尝试重新发起请求给系统B，造成系统B重复处理，发起多条消息给RocketMQ造成重复消费。   
+  2，在系统B发送消息给RocketMQ的时候，也有可能会发生和上面一样的问题，消息发送超时，结果系统B重试，导致RocketMQ接收到了重复的消息。   
+  3，当RocketMQ成功接收到消息，并将消息交给消费者处理，如果消费者消费完成后还没来得及提交offset给RocketMQ，自己宕机或者重启了，
+    那么RocketMQ没有接收到offset，就会认为消费失败了，会重发消息给消费者再次消费。   
+  保证消息不被重复消费，需要通过**幂等性**(对于同一个系统，在同样条件下，一次请求和重复多次请求对资源的影响是一致的)来实现。
+  可以在消费端根据业务ID判断该操作是否已经执行，如果已经执行过了就不再执行。举个例子，比如每条消息都会有一条唯一的消息ID，消费者接收到消息会存储消息日志，
+  如果日志中存在相同ID的消息，就证明这条消息已经被处理过了。   
     
     
