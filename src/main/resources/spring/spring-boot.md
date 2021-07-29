@@ -88,8 +88,158 @@
 + **Spring boot执行流程**   
     ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/spring/spring-boot-app-start.png)        
     
++ **Spring boot自动装配**   
+    SpringBoot定义了一套规范，这套规范规定：SpringBoot在启动的时候外部引用jar包中的META-INF/spring.factories文件，将文件中配置的类信息加载到
+    spring容器，并执行类中定义的各种操作。对于外部jar来说，只需要按照SpringBoot定义的标准，就能将自己的功能装置进SpringBoot。   
+    SpringBoot核心注解SpringBootApplication：   
+    ```java
+    @Target({ElementType.TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+    @Inherited
+    <1.>@SpringBootConfiguration
+    <2.>@ComponentScan
+    <3.>@EnableAutoConfiguration
+    public @interface SpringBootApplication {
     
+    }
     
+    @Target({ElementType.TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+    @Configuration //实际上它也是一个配置类
+    public @interface SpringBootConfiguration {
+    }
+    ```
+    大概可以把SpringBootApplication看作是@Configuration，@EnableAutoConfiguration和@ComponentScan注解的集合。这三个注解的作用为：  
+    - EnableAutoConfiguration：启动SpringBoot的自动装配机制。   
+    - Configuration：允许在上下文中注册额外的Bean或导入其他配置。   
+    - ComponentScan：扫描被@Component (@Service,@Controller)注解的Bean，注解默认会扫描启动类所在的包下的所有的类，可以自定义不扫描某些Bean。
+    @EnableAutoConfiguration是实现自动装配的核心类。   
+    @EnableAutoConfiguration只是一个简单的注解，@Enablexxx的注解是开启某一项功能的注解，其原理是借助`@Import`实现,将所有符合自动配置条件的bean定义加载到IOC容器。
+    自动装配实际是通过@Import加载AutoConfigurationImportSelector类,然后由AutoConfigurationImportSelector实现加载功能。   
+    ```java
+    @Target({ElementType.TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+    @Inherited
+    @AutoConfigurationPackage //作用：将main包下的所欲组件注册到容器中
+    @Import({AutoConfigurationImportSelector.class}) //加载自动装配类 xxxAutoconfiguration
+    public @interface EnableAutoConfiguration {
+        String ENABLED_OVERRIDE_PROPERTY = "spring.boot.enableautoconfiguration";
+    
+        Class<?>[] exclude() default {}; //排除相关类
+    
+        String[] excludeName() default {};//排除相关类
+    }
+    ```
+    `AutoConfigurationImportSelector.class`的类的继承关系：   
+    ```java
+    public class AutoConfigurationImportSelector implements DeferredImportSelector, BeanClassLoaderAware, ResourceLoaderAware, BeanFactoryAware, EnvironmentAware, Ordered {
+    
+    }
+    
+    public interface DeferredImportSelector extends ImportSelector {
+    
+    }
+    
+    public interface ImportSelector {
+        String[] selectImports(AnnotationMetadata var1);
+    }
+    ```
+    AutoConfigurationImportSelectorl类实现了`ImportSelector`接口，也实现了这个接口中的selectImports方法，该方法主要拥有获取所有符合条件的
+    类的全限类名。这些类需要被加载到IOC容器内。   
+    ```java
+    private static final String[] NO_IMPORTS = new String[0];
+    
+    public String[] selectImports(AnnotationMetadata annotationMetadata) {
+            // <1>.判断自动装配开关是否打开
+            if (!this.isEnabled(annotationMetadata)) {
+                return NO_IMPORTS;
+            } else {
+              //<2>.获取所有需要装配的bean
+                AutoConfigurationMetadata autoConfigurationMetadata = AutoConfigurationMetadataLoader.loadMetadata(this.beanClassLoader);
+                AutoConfigurationImportSelector.AutoConfigurationEntry autoConfigurationEntry = this.getAutoConfigurationEntry(autoConfigurationMetadata, annotationMetadata);
+                return StringUtils.toStringArray(autoConfigurationEntry.getConfigurations());
+            }
+        }
+    ``` 
+    getAutoConfigurationEntry()方法是核心，其主要负责加载自动配置类。   
+        ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/spring/getAutoConfigurationEntry.png)      
+       
+    getAutoConfigurationEntry其实现为：   
+    ```java
+    private static final AutoConfigurationEntry EMPTY_ENTRY = new AutoConfigurationEntry();
+    
+    AutoConfigurationEntry getAutoConfigurationEntry(AutoConfigurationMetadata autoConfigurationMetadata, AnnotationMetadata annotationMetadata) {
+            //<1>.
+            if (!this.isEnabled(annotationMetadata)) {
+                return EMPTY_ENTRY;
+            } else {
+                //<2>.
+                AnnotationAttributes attributes = this.getAttributes(annotationMetadata);
+                //<3>.
+                List<String> configurations = this.getCandidateConfigurations(annotationMetadata, attributes);
+                //<4>.
+                configurations = this.removeDuplicates(configurations);
+                Set<String> exclusions = this.getExclusions(annotationMetadata, attributes);
+                this.checkExcludedClasses(configurations, exclusions);
+                configurations.removeAll(exclusions);
+                configurations = this.filter(configurations, autoConfigurationMetadata);
+                this.fireAutoConfigurationImportEvents(configurations, exclusions);
+                return new AutoConfigurationImportSelector.AutoConfigurationEntry(configurations, exclusions);
+            }
+        }
+    ```
+    第一步判断自动装配开关是否打开。默认是spring.boot.enableautoconfiguration=true，可以在 application.properties 或 application.yml 中设置。   
+    如果没有禁用则进入else分支，第一步操作首先加载所有Spring预先定义的配置条件信息，这些信息在`org.springframework.boot.autoconfigure`包下
+    的`META-INF/spring-autoconfigure-metadata.properties`文件中。   
+    这些配置条件的主要含义是：如果需要自动装配某个类，你觉得需要先存放哪些类或者那些配置文件等等条件，这些条件的判断主要是用了`@ConditionalXXX`注解。   
+    文件内容大致为：
+    `org.springframework.boot.actuate.autoconfigure.web.servlet.WebMvcEndpointChildContextConfiguration.ConditionalOnClass=org.springframework.web.servlet.DispatcherServlet
+     org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration.ConditionalOnClass=javax.sql.DataSource,io.micrometer.core.instrument.MeterRegistry
+     org.springframework.boot.actuate.autoconfigure.flyway.FlywayEndpointAutoConfiguration.AutoConfigureAfter=org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration
+    `
+     ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/spring/first.png)      
+    第二步用于获取EnableAutoConfiguration注解中的`exclude`和`excludeName`。   
+     ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/spring/second.png)      
+    第三步获取用于自动装配的所有配置类，读取`META-INF/spring.factories`。 
+     ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/spring/thrid.png)      
+    `spring-boot/spring-boot-project/spring-boot-autoconfigure/src/main/resources/META-INF/spring.factories`    
+    xxxAutoConfiguration的作用是按需加载组件。   
+    ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/spring/auto.png)      
+    不仅是这个依赖下的META-INF/spring.factories会被读取到，所有Spring Boot Starter下的META-INF/spring.factories都会被读取到。   
+    第四步spring.factories中的配置不是每次启动都会全部加载    
+    ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/spring/fourth.png)     
+    filter()方法会对其进行筛选，@ConditionalOnXXX注解中所有的条件都满足，该类才会生效。   
+    例如：   
+    ```java
+    @Configuration
+    // 检查相关的类：RabbitTemplate 和 Channel是否存在
+    // 存在才会加载
+    @ConditionalOnClass({ RabbitTemplate.class, Channel.class })
+    @EnableConfigurationProperties(RabbitProperties.class)
+    @Import(RabbitAnnotationDrivenConfiguration.class)
+    public class RabbitAutoConfiguration {
+    }
+    ```
+    Spring Boot提供的条件注解类：   
+    @ConditionalOnBean:当容器内有指定Bean的条件下次才会被加载。   
+    @ConditionalOnMissingBean：当容器内没有指定Bean的条件下。   
+    @ConditionalOnSingleCandidate：当指定Bean在容器中只有一个，或者虽然有多个但是指定首选Bean。   
+    @ConditionalOnClass：当路径下有指定Class的条件下。   
+    @ConditionalOnMissingClass：当路径下没有指定Class条件下。   
+    @ConditionalOnProperty：指定的属性是否有指定的值。   
+    @ConditionalOnResource：类路径是否有指定的值。    
+    @ConditionalOnExpression：基于SpEL表达式作为判断条件。   
+    @ConditionalOnJava：基于Java版本作为判断条件。   
+    @ConditionalOnJndi：在JNDI存在的条件下差在指定的位置(??)。   
+    @ConditionalOnNotWebApplication：在当前项目不是web的条件下。   
+    @ConditionalOnWebApplication：在当前项目是web的条件下。   
+    
+    Spring Boot通过`@EnableAutoConfiguration`开启自动装配，通过`SpringFactoriesLoader` 最终加载`META-INF/spring.factories`中
+    的自动配置类实现自动装配，自动装配类其实是通过`@Conditional`按需加载配置类，想要其生效必须引入spring-boot-starter-xxx包实现起步依赖。
+     
     
     
     
