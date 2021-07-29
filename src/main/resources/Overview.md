@@ -77,9 +77,9 @@
 + [**Mybatis**]()  
 - [ ] EX
 - [ ] EX 
-+ [**SpringBoot**]()   
-- [ ] EX
-- [ ] EX
++ [**SpringBoot**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/spring/spring-boot.md)   
+- [x] 启动流程
+- [x] 自动装配
 + [**SpringCloud**]()   
 - [ ] EX
 - [ ] EX
