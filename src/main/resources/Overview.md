@@ -91,12 +91,12 @@
 + [**Paxos**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/distributed/distributed.md)
 ---
 ## 组件
-+ [**Dubbo**]()
-- [ ] 通讯模型
-- [ ] Dubbo和SpringCloud区别
-- [ ] Dubbo支持协议
-- [ ] Dubbo节点角色
-- [ ] Dubboz怎么处理超时
++ [**Dubbo**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/dubbo/dubbo.md)
+- [x] 通讯模型
+- [x] Dubbo和SpringCloud区别
+- [x] Dubbo支持协议
+- [x] Dubbo节点角色
+- [x] Dubboz怎么处理超时
 + [**MQ**](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mq/mq.md)
 - [x] RocketMQ
 - [ ] Kafka
