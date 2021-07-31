@@ -84,6 +84,7 @@ public class Solution {
 
     /**
      * 选择数组
+     *
      * @param nums
      * @param k
      * @return
@@ -108,6 +109,23 @@ public class Solution {
             }
         }
     }
+
+
+    public static void moveZeroes(int[] nums) {
+        int n = nums.length;
+        //两个指针i和j
+        int j = 0;
+        for(int i = 0;i<n;i++){
+            //当前元素!=0，就把其交换到左边，等于0的交换到右边
+            if(nums[i] != 0){
+                int tmp = nums[i];
+                nums[i] = nums[j];
+                nums[j++] = tmp;
+            }
+        }
+
+    }
+
 
     public static void main(String[] args) {
 //        int[] nums = {-1, 0, 3, 5, 9, 12};
