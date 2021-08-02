@@ -72,7 +72,7 @@
         * 在每个volatile写操作的后面插入一个StoreLoad屏障。   
         * 在每个volatile读操作的后面插入一个LoadLoad屏障。   
         * 在每个volatile读操作的后面插入一个LoadStore屏障。    
-   * 8在汇编角度，CPU是怎么识别到不同的内存屏障：   
+   * 在汇编角度，CPU是怎么识别到不同的内存屏障：   
         * sfence：实现Store Barrior 会将store buffer中缓存的修改刷入L1 cache中，使得其他cpu核可以观察到这些修改，而且之后的写操作不会被调度到之前，即sfence之前的写操作一定在sfence完成且全局可见。   
         * lfence：实现Load Barrior 会将invalidate queue失效，强制读取入L1 cache中，而且lfence之后的读操作不会被调度到之前，即lfence之前的读操作一定在lfence完成（并未规定全局可见性）。   
         * mfence：实现Full Barrior 同时刷新store buffer和invalidate queue，保证了mfence前后的读写操作的顺序，同时要求mfence之后写操作结果全局可见之前，mfence之前写操作结果全局可见。   

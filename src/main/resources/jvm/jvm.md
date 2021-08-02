@@ -116,13 +116,16 @@
     * 新生代的回收算法：   
     新生代分为Eden，survivor0，survivor2(8:1:1)。一半来说，大部分对象先在Eden区域生成(当然也有特殊情况，大对象(大对象指需要大量(例如很长的数组)连续内存空间地址的对象)直接进入老年代)，
     回收时先将Eden区域存活的对象复制到survivor0区域，然后清空
-    Eden区域，当survivor也满了时，将Eden区域和survivor0的存活的对象数据复制到survivor1，然后清空Eden和这个survivor0，此时survivor0是空的，然后
+    Eden区域，当survivor0也满了时，将Eden区域和survivor0的存活的对象数据复制到survivor1，然后清空Eden和这个survivor0，此时survivor0是空的，然后
     将survivor0和survivor1互换，即保持survivor1位空（为什么保持survivor1为空？为了让Eden区和survivor0交互存活对象），如此往复，如果Eden没有足够的空间，
-    则会触发一次Minor GC。  
+    则会触发一次Minor GC。   
     Minor GC在Eden区域满的时候和新创建的对象大小大于Eden区域所剩空间时会触发Minor GC。
     当survivor1不足以存放Eden和survivor0的存活对象时，就将存活的对象放入老年代，若是老年的也满了，则触发一次full GC，也就是新生代、老年代都进行回收。   
     新生代发生的GC为Minor GC，Minor GC发生的频率比较高（不一定等Eden满了才触发）。
-    Full GC触发条件：1、老年的空间不足时，2、晋升到老年代的对象的平均大小大于老年代剩余空间，3、MinorGC后需要存放的对象大于老年代的剩余空间大小。
+    Full GC触发条件：   
+    1、老年的空间不足时，   
+    2、晋升到老年代的对象的平均大小大于老年代剩余空间，    
+    3、MinorGC后需要存放的对象大于老年代的剩余空间大小。    
     * 老年的回收算法：   
     回收主要以Mark-Compact为主。    
     在年前代经历了N次（默认为15次）垃圾回收后仍存活的对象，就会放到老年的中，因此，可以认为年老代中存放的都是一些生命周期较长的对象。
