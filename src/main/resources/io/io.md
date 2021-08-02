@@ -187,5 +187,5 @@
       ByteBuf header = byteBuf.slice(0, 5);
       ByteBuf body = byteBuf.slice(5, 10);
     ```
-     > 参考【https://www.cnblogs.com/xiaolincoding/p/13719610.html】
-          【https://zhuanlan.zhihu.com/p/76059333】
+     > 参考 https://www.cnblogs.com/xiaolincoding/p/13719610.html
+           https://zhuanlan.zhihu.com/p/76059333

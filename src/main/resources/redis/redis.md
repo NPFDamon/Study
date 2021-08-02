@@ -122,7 +122,7 @@
         把多个HyperLogLog数据结构合并为一个新的键为destkey的HyperLogLog数据结构，合并后的HyperLogLog的基数接近于所有输入HyperLogLog的可见集合（Observed Set）的并集的基数。
     * Geospatial   
         可以用来保存地理位置，并做位置距离计算或者根据半径计算位置等。
-+ **Redis数据过期淘汰**
++ **Redis数据过期淘汰**    
     Redis会维护一个过期字典来保存数据过期时间。过期字典的键指向Redis数据库中key，过期字典的value是一个long long 类型的整数，保存了键值指向数据库key的过期时间。
     过期字典在redisDb里：
     ```
@@ -141,15 +141,16 @@
         但是，仅仅通过给 key 设置过期时间还是有问题的。因为还是可能存在定期删除和惰性删除漏掉了很多过期key的情况。这样就导致大量过期key堆积在内存里，然后就OOM了。
         可以通过Redis内存淘汰机制解决。   
     Redis内存淘汰机制：   
-        1、volatile-lru（least recently used）：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据进行淘汰。   
+        1、volatile-lru（least recently used）：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据进行淘汰(从使用时间去做判断)。   
         2、volatile-ttl：从已设置过去时间的数据集中挑选要过期的数据淘汰。   
         3、volatile-random：从已设置过去时间的数据集中随机选择数据淘汰。   
         4、allkeys-lru（least recently used）：当内存不足以容纳写入新数据时，移除最近最少使用的key。      
         5、allkeys-random：从数据集（server.db[i].dict）中随机挑选数据进行淘汰。   
         6、no-eviction：禁止驱逐数据，当内存不足以容纳写入新数据时，新写入操作会报错。   
-        7、volatile-lfu（least frequently used）：从已设置过期时间的数据集（server.db[i].expires）中挑选最不经常使用的数据淘汰。   
-        8、allkeys-lfu（least frequently used）：当内容不足以写入新数据时，移除最不经常使用的数据。
-+ **Redis持久化**
+        7、volatile-lfu（least frequently used）：从已设置过期时间的数据集（server.db[i].expires）中挑选最不经常使用的数据淘汰(从使用次数金属判断)。    
+        8、allkeys-lfu（least frequently used）：当内容不足以写入新数据时，移除最不经常使用的数据。   
+        [lru,lfu参考](https://zhuanlan.zhihu.com/p/352910565)    
++ **Redis持久化**    
     * RDB   
     工作原理：   
         1、Redis调用fork()，产生一个子进程。   
