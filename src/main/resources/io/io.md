@@ -30,14 +30,14 @@
   `>` ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/reactor.jpeg)
   + Reactor单线程模型（Single threaded version）   
       ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/basic-reactor-design.jpeg)    
-      多路复用器(Reactor): 负责监听注册的IO事件（对应图中Reactor）。
-      事件分离器（Event Demultiplexer）：将多路复用器中返回的就绪事件分到对应的处理函数中。（对应图中dispatch）。
-      事件处理器（Event Handler）：负责处理对应事件的处理函数。（对应上图read,decode,compute,encode,send等）。
-      Reactor通过epol监听事件，收到时间后通过dispatch进行转发，Handel完成相应的read,decode,compute,encode,send等操作。
-      Reactor只试用于小容量应用场景。对于高并发，高负载并不试用。
-      1.无法充分利用CPU（一个线程处理），无法满足大数据量。
-      2.高并发时Reactor线程过载之后会变得非常慢，会导致大量客户端连接超时。
-      3.一旦Reactor线程意外中断或者进入死循环，会导致整个系统通信模块不可用。
+      多路复用器(Reactor): 负责监听注册的IO事件（对应图中Reactor）。   
+      事件分离器（Event Demultiplexer）：将多路复用器中返回的就绪事件分到对应的处理函数中。（对应图中dispatch）。   
+      事件处理器（Event Handler）：负责处理对应事件的处理函数。（对应上图read,decode,compute,encode,send等）。   
+      Reactor通过epol监听事件，收到时间后通过dispatch进行转发，Handel完成相应的read,decode,compute,encode,send等操作。   
+      Reactor只试用于小容量应用场景。对于高并发，高负载并不试用。   
+      1.无法充分利用CPU（一个线程处理），无法满足大数据量。   
+      2.高并发时Reactor线程过载之后会变得非常慢，会导致大量客户端连接超时。   
+      3.一旦Reactor线程意外中断或者进入死循环，会导致整个系统通信模块不可用。   
   + Reactor多线程模型   
       ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/worker-thread-pools-reactor-design.jpeg)  
       相比较单线程模型，多线程模型获取到IO的读写事件之后，对应的业务逻辑处理由线程池来处理。handle收到响应后通过send将结果发送给客户端。这样可以降低
