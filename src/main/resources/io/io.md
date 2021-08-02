@@ -33,7 +33,8 @@
       多路复用器(Reactor): 负责监听注册的IO事件（对应图中Reactor）。   
       事件分离器（Event Demultiplexer）：将多路复用器中返回的就绪事件分到对应的处理函数中。（对应图中dispatch）。   
       事件处理器（Event Handler）：负责处理对应事件的处理函数。（对应上图read,decode,compute,encode,send等）。   
-      Reactor通过epol监听事件，收到时间后通过dispatch进行转发，Handel完成相应的read,decode,compute,encode,send等操作。   
+      **主要流程为**：   
+      Reactor通过epoll监听事件，收到时间后通过dispatch进行转发，Handel完成相应的read,decode,compute,encode,send等操作。   
       Reactor只试用于小容量应用场景。对于高并发，高负载并不试用。   
       1.无法充分利用CPU（一个线程处理），无法满足大数据量。   
       2.高并发时Reactor线程过载之后会变得非常慢，会导致大量客户端连接超时。   
@@ -42,7 +43,7 @@
       ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/worker-thread-pools-reactor-design.jpeg)  
       相比较单线程模型，多线程模型获取到IO的读写事件之后，对应的业务逻辑处理由线程池来处理。handle收到响应后通过send将结果发送给客户端。这样可以降低
       Reactor的性能开销，使其专注于处理事件分发操作，从而提升吐吞量。
-      主要流程为：
+      **主要流程为**：
       Reactor通过epoll监听事件，通过dispatch进行转发。
       如果是建立连接事件由acceptor进行处理，然后创建一个handle进行连接完成后续各种事件。
       如果不是连接事件，Reactor会分发调用连接对应的handle进行处理。
@@ -57,7 +58,7 @@
       将Reactor分成两部分，mainReactor负责监听server socket,用来处理网络IO连接建立操作，并将建立的socketChannel指定，注册给subReactor
       subReactor主要做和建立起来的socket做数据交互和事件业务处理。通常subReactor的个数可以和CPU核心数相同。
       Nginx、Swoole、Memcached和Netty都是采用这种实现。
-      主要流程为：
+      **主要流程为**：
       从主线程中随机选择一个Reactor作为acceptor线程，用于绑定监听端口，接收客户端连接。
       acceptor线程接收客户端连接请求之后,创建新的SocketChannel,将其注册到主线程池的其他Reactor线程上，由其负责接入认证、IP黑白名单过滤、握手等操作。
       上述步骤完成之后，业务链路建立完成，将SocketChannel从主线程池的多路复用器Reactor线程上摘除，重新注册到subReactor线程上，并创建一个handle处理各种连接事件。
