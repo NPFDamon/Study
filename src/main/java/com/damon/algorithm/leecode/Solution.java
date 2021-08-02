@@ -1,5 +1,10 @@
 package com.damon.algorithm.leecode;
 
+import com.damon.algorithm.ListReverse;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Author: cashmama
  * @Date: 2021/7/23-16:50
@@ -115,9 +120,9 @@ public class Solution {
         int n = nums.length;
         //两个指针i和j
         int j = 0;
-        for(int i = 0;i<n;i++){
+        for (int i = 0; i < n; i++) {
             //当前元素!=0，就把其交换到左边，等于0的交换到右边
-            if(nums[i] != 0){
+            if (nums[i] != 0) {
                 int tmp = nums[i];
                 nums[i] = nums[j];
                 nums[j++] = tmp;
@@ -127,11 +132,50 @@ public class Solution {
     }
 
 
+    public static List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        generateAll(new char[2 * n],0,res);
+        return res;
+    }
+
+    public static void generateAll(char[] current, int pos, List<String> res) {
+        if (pos == current.length) {
+            //进行筛选
+            if(valid(current)){
+                res.add(new String(current));
+            }
+        } else {
+            //穷举出所有可能
+            current[pos] = '(';
+            generateAll(current, pos + 1, res);
+            current[pos] = ')';
+            generateAll(current, pos + 1, res);
+        }
+    }
+
+    public static boolean valid(char[] current) {
+        int balance = 0;
+        for (char c : current) {
+            if (c == '(') {
+                ++balance;
+            } else {
+                --balance;
+            }
+            if (balance < 0) {
+                return false;
+            }
+        }
+        return balance == 0;
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {-1, 0, 3, 5, 9, 12};
 //        int[] nums = {5};
-        int[] nums = {-4, -1, 2, 3, 10};
-        int[] as = rotate(nums, 3);
-        System.out.println("====>");
+//        int[] nums = {-4, -1, 2, 3, 10};
+//        int[] as = rotate(nums, 3);
+        List<String> res = generateParenthesis(4);
+        System.out.println("=println===>");
+
     }
 }

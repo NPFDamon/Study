@@ -77,6 +77,48 @@ public class ListReverse {
         return newHead;
     }
 
+    /**
+     * 合并两个有序链表
+     */
+    public static Node merge(Node n1,Node n2){
+        if(n1 == null){
+            return n2;
+        }else if(n2 == null){
+            return n1;
+        }else if(n1.value < n2.value){
+            n1.next = merge(n1.next ,n1);
+            return n1;
+        }else{
+            n2.next= merge(n1,n2.next);
+            return n2;
+        }
+    }
+
+
+
+    /**
+     * 合并两个有序链表
+     */
+    public static Node merge_Iteration(Node n1,Node n2){
+        Node pre = new Node(1);
+
+        Node prev = pre;
+        while (n1 != null && n2 != null){
+            if(n1.value < n2.value){
+                prev.next = n1;
+                n1 = n1.next;
+            }else {
+                prev.next = n2;
+                n2 = n2.next;
+            }
+            prev = prev.next;
+        }
+
+        prev.next = n1 == null ? n2:n1;
+        return prev;
+    }
+
+
     private static class Node {
         private Integer value;
 
