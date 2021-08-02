@@ -42,35 +42,35 @@
   + Reactor多线程模型   
       ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/worker-thread-pools-reactor-design.jpeg)  
       相比较单线程模型，多线程模型获取到IO的读写事件之后，对应的业务逻辑处理由线程池来处理。handle收到响应后通过send将结果发送给客户端。这样可以降低
-      Reactor的性能开销，使其专注于处理事件分发操作，从而提升吐吞量。
-      **主要流程为**：
-      Reactor通过epoll监听事件，通过dispatch进行转发。
-      如果是建立连接事件由acceptor进行处理，然后创建一个handle进行连接完成后续各种事件。
-      如果不是连接事件，Reactor会分发调用连接对应的handle进行处理。
-      Handler只负责响应事件，不做具体业务处理，通过Read读取数据后，会分发给后面的Worker线程池进行业务处理。
-      Worker线程池会分配独立的线程完成真正的业务处理，如何将响应结果发给Handler进行处理。
-      Handler收到响应结果后通过send将响应结果返回给Client。
-      但是这个模型存在的问题：
-      多线程数据共享和访问比较复杂。如果子线程完成业务处理后，把结果传递给主线程Reactor进行发送，就会涉及共享数据的互斥和保护机制。
-      Reactor承担所有事件的监听和响应，只在主线程中运行，可能会存在性能问题。例如并发百万客户端连接，或者服务端需要对客户端握手进行安全认证，但是认证本身非常损耗性能。
-  + 主从Reactor多线程模型
+      Reactor的性能开销，使其专注于处理事件分发操作，从而提升吐吞量。    
+      **主要流程为**：   
+      Reactor通过epoll监听事件，通过dispatch进行转发。   
+      如果是建立连接事件由acceptor进行处理，然后创建一个handle进行连接完成后续各种事件。   
+      如果不是连接事件，Reactor会分发调用连接对应的handle进行处理。   
+      Handler只负责响应事件，不做具体业务处理，通过Read读取数据后，会分发给后面的Worker线程池进行业务处理。   
+      Worker线程池会分配独立的线程完成真正的业务处理，如何将响应结果发给Handler进行处理。   
+      Handler收到响应结果后通过send将响应结果返回给Client。   
+      但是这个模型存在的问题：   
+      多线程数据共享和访问比较复杂。如果子线程完成业务处理后，把结果传递给主线程Reactor进行发送，就会涉及共享数据的互斥和保护机制。    
+      Reactor承担所有事件的监听和响应，只在主线程中运行，可能会存在性能问题。例如并发百万客户端连接，或者服务端需要对客户端握手进行安全认证，但是认证本身非常损耗性能。   
+  + 主从Reactor多线程模型   
       ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/multiple-reactors-design.jpeg)  
       将Reactor分成两部分，mainReactor负责监听server socket,用来处理网络IO连接建立操作，并将建立的socketChannel指定，注册给subReactor
-      subReactor主要做和建立起来的socket做数据交互和事件业务处理。通常subReactor的个数可以和CPU核心数相同。
-      Nginx、Swoole、Memcached和Netty都是采用这种实现。
-      **主要流程为**：
-      从主线程中随机选择一个Reactor作为acceptor线程，用于绑定监听端口，接收客户端连接。
-      acceptor线程接收客户端连接请求之后,创建新的SocketChannel,将其注册到主线程池的其他Reactor线程上，由其负责接入认证、IP黑白名单过滤、握手等操作。
-      上述步骤完成之后，业务链路建立完成，将SocketChannel从主线程池的多路复用器Reactor线程上摘除，重新注册到subReactor线程上，并创建一个handle处理各种连接事件。
-      当有新的事件发生时subReactor会调用handle进行事件处理。
-      handle通过read读取数据后，会分发给后面的work线程池进行业务处理。
-      work线程池会分配对应的线程进行相关的业务处理，并把处理结果返回给handle进行处理。
-      handle收到返回结果之后，通过send返回给客户端。
-  总结：   
-    响应快，不必为单个同步时间阻塞，虽然Reactor本身依然是同步的；
-    编程相对简单，可以最大程度的避免复杂的多线程及同步问题，并且避免了多线程/进程的切换开销；
-    可扩展性，可以方便地通过增加Reactor实例个数来充分利用CPU资源；
-    可复用性，Reactor模型本身与具体事件处理逻辑无关，具有很高的复用性。
+      subReactor主要做和建立起来的socket做数据交互和事件业务处理。通常subReactor的个数可以和CPU核心数相同。   
+      Nginx、Swoole、Memcached和Netty都是采用这种实现。   
+      **主要流程为**：   
+      从主线程中随机选择一个Reactor作为acceptor线程，用于绑定监听端口，接收客户端连接。   
+      acceptor线程接收客户端连接请求之后,创建新的SocketChannel,将其注册到主线程池的其他Reactor线程上，由其负责接入认证、IP黑白名单过滤、握手等操作。   
+      上述步骤完成之后，业务链路建立完成，将SocketChannel从主线程池的多路复用器Reactor线程上摘除，重新注册到subReactor线程上，并创建一个handle处理各种连接事件。   
+      当有新的事件发生时subReactor会调用handle进行事件处理。   
+      handle通过read读取数据后，会分发给后面的work线程池进行业务处理。   
+      work线程池会分配对应的线程进行相关的业务处理，并把处理结果返回给handle进行处理。   
+      handle收到返回结果之后，通过send返回给客户端。   
+  总结：    
+    响应快，不必为单个同步时间阻塞，虽然Reactor本身依然是同步的；   
+    编程相对简单，可以最大程度的避免复杂的多线程及同步问题，并且避免了多线程/进程的切换开销；   
+    可扩展性，可以方便地通过增加Reactor实例个数来充分利用CPU资源；   
+    可复用性，Reactor模型本身与具体事件处理逻辑无关，具有很高的复用性。   
 + **Proactor模式**   
   ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/io/Proactor.png)  
   Procator Initiator负责创建Procator和Handler，并将Procator和Handler都通过Asynchronous operation processor注册到内核。
