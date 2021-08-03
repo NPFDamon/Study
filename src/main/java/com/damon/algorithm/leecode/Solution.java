@@ -3,7 +3,9 @@ package com.damon.algorithm.leecode;
 import com.damon.algorithm.ListReverse;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: cashmama
@@ -88,7 +90,7 @@ public class Solution {
 
 
     /**
-     * 选择数组
+     * 旋转数组
      *
      * @param nums
      * @param k
@@ -132,16 +134,22 @@ public class Solution {
     }
 
 
+    /**
+     * 括号生成
+     *
+     * @param n
+     * @return
+     */
     public static List<String> generateParenthesis(int n) {
         List<String> res = new ArrayList<>();
-        generateAll(new char[2 * n],0,res);
+        generateAll(new char[2 * n], 0, res);
         return res;
     }
 
     public static void generateAll(char[] current, int pos, List<String> res) {
         if (pos == current.length) {
             //进行筛选
-            if(valid(current)){
+            if (valid(current)) {
                 res.add(new String(current));
             }
         } else {
@@ -169,13 +177,110 @@ public class Solution {
     }
 
 
+    /**
+     * 括号生成 回溯发
+     *
+     * @param n
+     * @return
+     */
+    public static List<String> generateParenthesis_1(int n) {
+        List<String> res = new ArrayList<>();
+        backtrack(res, new StringBuilder(), 0, n, 0);
+        return res;
+    }
+
+    public static void backtrack(List<String> ans, StringBuilder sb, int open, int max, int close) {
+        if (sb.length() == 2 * max) {
+            ans.add(sb.toString());
+            return;
+        }
+        if (open < max) {
+            sb.append('(');
+            backtrack(ans, sb, open + 1, max, close);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        if (close < open) {
+            sb.append(')');
+            backtrack(ans, sb, open, max, close + 1);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
+
+    List<String> res = new ArrayList<>();
+
+    public List<String> generateParenthesis_2(int n) {
+        if (n <= 0) {
+            return res;
+        }
+        getParenthesis("", n, n);
+        return res;
+    }
+
+    private void getParenthesis(String str, int left, int right) {
+        if (left == 0 && right == 0) {
+            res.add(str);
+            return;
+        }
+        if (left == right) {
+            //剩余左右括号数相等，下一个只能用左括号
+            getParenthesis(str + "(", left - 1, right);
+        } else if (left < right) {
+            //剩余左括号小于右括号，下一个可以用左括号也可以用右括号
+            if (left > 0) {
+                getParenthesis(str + "(", left - 1, right);
+            }
+            getParenthesis(str + ")", left, right - 1);
+        }
+    }
+
+
+    /**
+     * 两数之和
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> res = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (res.containsKey(target - nums[i])) {
+                return new int[]{i, res.get(target - nums[i])};
+            }
+            res.put(nums[i], i);
+        }
+        return new int[0];
+    }
+
+    /**
+     * 最长字符串
+     *
+     * @param s
+     * @return
+     */
+    public static int lengthOfLongestSubstring(String s) {
+        if (s.length()==0) return 0;
+        HashMap<Character, Integer> map = new HashMap<>();
+        int start = 0, max = 0;
+        for (int end = 0; end < s.length(); end++) {
+            char c = s.charAt(end);
+            if (map.containsKey(c)) {
+                start = Math.max(map.get(c) + 1, start);
+            }
+            max = Math.max(max, end - start + 1);
+            map.put(c, end);
+        }
+        return max;
+    }
+
     public static void main(String[] args) {
 //        int[] nums = {-1, 0, 3, 5, 9, 12};
 //        int[] nums = {5};
 //        int[] nums = {-4, -1, 2, 3, 10};
 //        int[] as = rotate(nums, 3);
-        List<String> res = generateParenthesis(4);
-        System.out.println("=println===>");
+//        List<String> res = generateParenthesis(4);
+        int res = lengthOfLongestSubstring("pwwkew");
+        System.out.println("=println===>" + res);
 
     }
 }

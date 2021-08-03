@@ -235,6 +235,11 @@ public class BinaryTree {
         return head;
     }
 
+    /**
+     * 平衡二叉树
+     * @param node
+     * @return
+     */
     public static boolean isBalance(TreeNode node) {
         return check(node, node);
     }
