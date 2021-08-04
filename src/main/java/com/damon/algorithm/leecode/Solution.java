@@ -2,10 +2,7 @@ package com.damon.algorithm.leecode;
 
 import com.damon.algorithm.ListReverse;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author: cashmama
@@ -259,7 +256,7 @@ public class Solution {
      * @return
      */
     public static int lengthOfLongestSubstring(String s) {
-        if (s.length()==0) return 0;
+        if (s.length() == 0) return 0;
         HashMap<Character, Integer> map = new HashMap<>();
         int start = 0, max = 0;
         for (int end = 0; end < s.length(); end++) {
@@ -273,13 +270,96 @@ public class Solution {
         return max;
     }
 
+    /**
+     * 最长回文字符串
+     *
+     * @param s
+     * @return
+     */
+    public static String longestPalindrome(String s) {
+        if (s == null || s.length() < 1) {
+            return "";
+        }
+
+        int start = 0, end = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int len1 = expandAroundCenter(s, i, i);
+            int len2 = expandAroundCenter(s, i, i + 1);
+            int len = Math.max(len1, len2);
+            if (len > end - start) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+        return s.substring(start, end + 1);
+    }
+
+
+    public static int expandAroundCenter(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            --left;
+            ++right;
+        }
+        return right - left - 1;
+    }
+
+
+    Random random = new Random();
+
+    /**
+     * 数组中第k大元素
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int findKthLargest(int[] nums, int k) {
+        return quickSelect(nums, 0, nums.length - 1, nums.length - k);
+    }
+
+    public int quickSelect(int[] a, int l, int r, int index) {
+        int q = randomPartition(a, l, r);
+        if (q == index) {
+            return a[q];
+        } else {
+            return q < index ? quickSelect(a, q + 1, r, index) : quickSelect(a, l, q - 1, index);
+        }
+    }
+
+    public int randomPartition(int[] a, int l, int r) {
+        int i = random.nextInt(r - l + 1) + l;
+        swap(a, i, r);
+        return partition(a, l, r);
+    }
+
+    public int partition(int[] a, int l, int r) {
+        int x = a[r], i = l - 1;
+        for (int j = l; j < r; ++j) {
+            if (a[j] <= x) {
+                swap(a, ++i, j);
+            }
+        }
+        swap(a, i + 1, r);
+        return i + 1;
+    }
+
+    public void swap(int[] a, int i, int j) {
+        int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    }
+
+
+
+
+
     public static void main(String[] args) {
 //        int[] nums = {-1, 0, 3, 5, 9, 12};
 //        int[] nums = {5};
 //        int[] nums = {-4, -1, 2, 3, 10};
 //        int[] as = rotate(nums, 3);
 //        List<String> res = generateParenthesis(4);
-        int res = lengthOfLongestSubstring("pwwkew");
+        String res = longestPalindrome("babad");
         System.out.println("=println===>" + res);
 
     }

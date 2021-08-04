@@ -62,7 +62,6 @@ public class ListReverse {
      * 递归方式
      * detail 参考:https://www.huaweicloud.com/articles/8357697.html
      *
-     *
      * @param head
      * @return
      */
@@ -80,42 +79,87 @@ public class ListReverse {
     /**
      * 合并两个有序链表
      */
-    public static Node merge(Node n1,Node n2){
-        if(n1 == null){
+    public static Node merge(Node n1, Node n2) {
+        if (n1 == null) {
             return n2;
-        }else if(n2 == null){
+        } else if (n2 == null) {
             return n1;
-        }else if(n1.value < n2.value){
-            n1.next = merge(n1.next ,n1);
+        } else if (n1.value < n2.value) {
+            n1.next = merge(n1.next, n1);
             return n1;
-        }else{
-            n2.next= merge(n1,n2.next);
+        } else {
+            n2.next = merge(n1, n2.next);
             return n2;
         }
     }
 
 
-
     /**
      * 合并两个有序链表
      */
-    public static Node merge_Iteration(Node n1,Node n2){
+    public static Node merge_Iteration(Node n1, Node n2) {
         Node pre = new Node(1);
 
         Node prev = pre;
-        while (n1 != null && n2 != null){
-            if(n1.value < n2.value){
+        while (n1 != null && n2 != null) {
+            if (n1.value < n2.value) {
                 prev.next = n1;
                 n1 = n1.next;
-            }else {
+            } else {
                 prev.next = n2;
                 n2 = n2.next;
             }
             prev = prev.next;
         }
 
-        prev.next = n1 == null ? n2:n1;
+        prev.next = n1 == null ? n2 : n1;
         return prev;
+    }
+
+
+    /**
+     * 两数相加
+     * 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+     * <p>
+     * 请你将两个数相加，并以相同形式返回一个表示和的链表。
+     * <p>
+     * 你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+     * <p>
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/add-two-numbers
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param l1
+     * @param l2
+     * @return
+     */
+    public Node addTwoNumbers(Node l1, Node l2) {
+        Node head = null, tail = null;
+        int val = 0;
+        while (l1 != null || l2 != null) {
+            int v1 = l1 != null ? l1.value : 0;
+            int v2 = l2 != null ? l2.value : 0;
+            int sum = v1 + v2 + val;
+            if (head == null) {
+                head = tail = new Node(sum % 10);
+            } else {
+                tail.next = new Node(sum % 10);
+                tail = tail.next;
+            }
+            //进位数
+            val = sum / 10;
+            if (l1 != null) {
+                l1 = l1.next;
+            }
+            if (l2 != null) {
+                l2 = l2.next;
+            }
+        }
+        if (val > 0) {
+            tail.next = new Node(val);
+        }
+        return head;
+
     }
 
 
