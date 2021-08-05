@@ -162,6 +162,20 @@ public class ListReverse {
 
     }
 
+    /**
+     * 合并n个有序链表
+     * 给你一个链表数组，每个链表都已经按升序排列。
+     * <p>
+     * 请你将所有链表合并到一个升序链表中，返回合并后的链表。
+     * https://leetcode-cn.com/problems/merge-k-sorted-lists/
+     *
+     * @param lists
+     * @return
+     */
+//    public Node mergeKLists(Node[] lists) {
+//
+//
+//    }
 
     private static class Node {
         private Integer value;
