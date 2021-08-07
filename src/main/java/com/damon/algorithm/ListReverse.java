@@ -177,6 +177,33 @@ public class ListReverse {
 //
 //    }
 
+    /**
+     * 删除倒数第n个节点
+     *
+     * @param head
+     * @param n
+     * @return
+     */
+    public static Node removeNthFromEnd(Node head, int n) {
+        Node node = new Node(0);
+        node.next = head;
+        Node first = head;
+        Node second = node;
+        for (int i = 0; i < n; i++) {
+            first = first.next;
+        }
+
+        while (first != null) {
+            first = first.next;
+            second = second.next;
+        }
+
+        second.next = second.next.next;
+        Node ans = node.next;
+        return ans;
+
+    }
+
     private static class Node {
         private Integer value;
 
