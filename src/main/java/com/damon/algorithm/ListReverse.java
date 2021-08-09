@@ -15,11 +15,11 @@ public class ListReverse {
      * @param head
      * @return
      */
-    public static Node reverseForeach(Node head) {
+    public static ListNode reverseForeach(ListNode head) {
         // 前一节点
-        Node prev = null;
+        ListNode prev = null;
         // 当前节点
-        Node curr = head;
+        ListNode curr = head;
 
         /**
          * 1 -> 2 -> 3 -> null
@@ -46,7 +46,7 @@ public class ListReverse {
          */
         while (curr != null) {
             //暂存当前节点的next节点
-            Node next = curr.next;
+            ListNode next = curr.next;
             //当前节点的下一节设置为前一节点
             curr.next = prev;
             //前一节点设置为当前节点
@@ -65,12 +65,12 @@ public class ListReverse {
      * @param head
      * @return
      */
-    public static Node reverseRecursion(Node head) {
+    public static ListNode reverseRecursion(ListNode head) {
         if (head == null || head.next == null) {
             return head;
         }
 
-        Node newHead = reverseRecursion(head.next);
+        ListNode newHead = reverseRecursion(head.next);
         head.next.next = head;
         head.next = null;
         return newHead;
@@ -79,7 +79,7 @@ public class ListReverse {
     /**
      * 合并两个有序链表
      */
-    public static Node merge(Node n1, Node n2) {
+    public static ListNode merge(ListNode n1, ListNode n2) {
         if (n1 == null) {
             return n2;
         } else if (n2 == null) {
@@ -97,23 +97,23 @@ public class ListReverse {
     /**
      * 合并两个有序链表
      */
-    public static Node merge_Iteration(Node n1, Node n2) {
-        Node pre = new Node(1);
+    public static ListNode merge_Iteration(ListNode n1, ListNode n2) {
+        ListNode dummyHead = new ListNode(0);
 
-        Node prev = pre;
+        ListNode tail = dummyHead;
         while (n1 != null && n2 != null) {
             if (n1.value < n2.value) {
-                prev.next = n1;
+                tail.next = n1;
                 n1 = n1.next;
             } else {
-                prev.next = n2;
+                tail.next = n2;
                 n2 = n2.next;
             }
-            prev = prev.next;
+            tail = tail.next;
         }
 
-        prev.next = n1 == null ? n2 : n1;
-        return prev;
+        tail.next = n1 == null ? n2 : n1;
+        return dummyHead.next;
     }
 
 
@@ -133,17 +133,17 @@ public class ListReverse {
      * @param l2
      * @return
      */
-    public Node addTwoNumbers(Node l1, Node l2) {
-        Node head = null, tail = null;
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode head = null, tail = null;
         int val = 0;
         while (l1 != null || l2 != null) {
             int v1 = l1 != null ? l1.value : 0;
             int v2 = l2 != null ? l2.value : 0;
             int sum = v1 + v2 + val;
             if (head == null) {
-                head = tail = new Node(sum % 10);
+                head = tail = new ListNode(sum % 10);
             } else {
-                tail.next = new Node(sum % 10);
+                tail.next = new ListNode(sum % 10);
                 tail = tail.next;
             }
             //进位数
@@ -156,7 +156,7 @@ public class ListReverse {
             }
         }
         if (val > 0) {
-            tail.next = new Node(val);
+            tail.next = new ListNode(val);
         }
         return head;
 
@@ -184,11 +184,11 @@ public class ListReverse {
      * @param n
      * @return
      */
-    public static Node removeNthFromEnd(Node head, int n) {
-        Node node = new Node(0);
-        node.next = head;
-        Node first = head;
-        Node second = node;
+    public static ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode listNode = new ListNode(0);
+        listNode.next = head;
+        ListNode first = head;
+        ListNode second = listNode;
         for (int i = 0; i < n; i++) {
             first = first.next;
         }
@@ -199,17 +199,55 @@ public class ListReverse {
         }
 
         second.next = second.next.next;
-        Node ans = node.next;
-        return ans;
+        return listNode.next;
 
     }
 
-    private static class Node {
+    /**
+     * 合并n个升序链表
+     *
+     * @param lists
+     * @return
+     */
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists.length == 0) {
+            return null;
+        }
+        ListNode node = null;
+
+        for (ListNode list : lists) {
+            node = merge_Iteration(node, list);
+        }
+        return node;
+    }
+
+
+    public ListNode mergeKLists_two(ListNode[] lists) {
+        if (lists.length == 0) {
+            return null;
+        }
+        int k = lists.length;
+        while (k > 1) {
+            int idx = 0;
+            for (int i = 0; i < k; i += 2) {
+                if (i == k - 1) {
+                    lists[idx++] = lists[i];
+                } else {
+                    lists[idx++] = merge_Iteration(lists[i], lists[i + 1]);
+                }
+            }
+            k = idx;
+        }
+        return lists[0];
+    }
+
+
+    private static class ListNode {
         private Integer value;
 
-        private Node next;
+        private ListNode next;
 
-        public Node(Integer value) {
+        public ListNode(Integer value) {
             this.value = value;
         }
 
@@ -217,16 +255,16 @@ public class ListReverse {
             return value;
         }
 
-        public Node setValue(Integer value) {
+        public ListNode setValue(Integer value) {
             this.value = value;
             return this;
         }
 
-        public Node getNext() {
+        public ListNode getNext() {
             return next;
         }
 
-        public Node setNext(Node next) {
+        public ListNode setNext(ListNode next) {
             this.next = next;
             return this;
         }
@@ -234,10 +272,10 @@ public class ListReverse {
 
 
     public static void main(String[] args) {
-        Node head = new Node(0);
-        Node one = new Node(1);
-        Node two = new Node(2);
-        Node three = new Node(3);
+        ListNode head = new ListNode(0);
+        ListNode one = new ListNode(1);
+        ListNode two = new ListNode(2);
+        ListNode three = new ListNode(3);
         head.next = one;
         one.next = two;
         two.next = three;
@@ -254,7 +292,7 @@ public class ListReverse {
 //            s = s.next;
 //        }
 //
-        Node w = reverseRecursion(head);
+        ListNode w = reverseRecursion(head);
 
         while (w != null) {
             System.out.println(w.getValue());

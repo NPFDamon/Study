@@ -158,6 +158,35 @@ public class Array {
             }
         }
         return res;
+    }
+
+    public static void nextPermutation(int[] nums) {
+        if(nums.length <= 1){
+            return;
+        }
+        int i = 1;
+        for (int j = i+1; j < nums.length; j++) {
+            if (nums[j] > nums[i]) {
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+            }
+            j++;
+        }
+        if (nums[0] > nums[1]) {
+            Collections.reverse(Arrays.asList(nums));
+        }
+    }
+
+
+    public static void main(String[] args) {
+//        int[] nums = {-1, 0, 3, 5, 9, 12};
+//        int[] nums = {5};
+        int[] nums = {1,2};
+//        int[] as = rotate(nums, 3);
+//        List<String> res = generateParenthesis(4);
+        nextPermutation(nums);
+        System.out.println("=println===>");
 
     }
 }

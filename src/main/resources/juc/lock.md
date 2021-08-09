@@ -61,7 +61,7 @@
         ```java
             public class CLHLock implements Lock {
                 private final ThreadLocal<CLHLock.Node> prev;
-                private final ThreadLocal<CLHLock.Node> node;
+                private final ThreadLocal<CLHLock.Node> listNode;
                 private final AtomicReference<CLHLock.Node> tail = new AtomicReference<>(new CLHLock.Node());
             
                 private static class Node {
@@ -70,14 +70,14 @@
             
                 public CLHLock() {
                     this.prev = ThreadLocal.withInitial(() -> null);
-                    this.node = ThreadLocal.withInitial(CLHLock.Node::new);
+                    this.listNode = ThreadLocal.withInitial(CLHLock.Node::new);
                 }
             
                 @Override
                 public void lock() {
-                    final Node node = this.node.get();
-                    node.locked = true;
-                    Node pred_node = this.tail.getAndSet(node);
+                    final Node listNode = this.listNode.get();
+                    listNode.locked = true;
+                    Node pred_node = this.tail.getAndSet(listNode);
                     this.prev.set(pred_node);
                     // 自旋
                     while (pred_node.locked);
@@ -85,20 +85,20 @@
             
                 @Override
                 public void unlock() {
-                    final Node node = this.node.get();
-                    node.locked = false;
-                    this.node.set(this.prev.get());
+                    final Node listNode = this.listNode.get();
+                    listNode.locked = false;
+                    this.listNode.set(this.prev.get());
                 }
             
             }
         ```
         * lock()
-        1.通过 this.node.get() 获取当前节点，并设置 locked 为 true。
-        2.接着调用 this.tail.getAndSet(node)，获取当前尾部节点 pred_node，同时把新加入的节点设置成尾部节点。
+        1.通过 this.listNode.get() 获取当前节点，并设置 locked 为 true。
+        2.接着调用 this.tail.getAndSet(listNode)，获取当前尾部节点 pred_node，同时把新加入的节点设置成尾部节点。
         3.之后就是把 this.prev 设置为之前的尾部节点，也就相当于链路的指向。
         4.最后就是自旋 while (pred_node.locked)，直至程序释放。
         * unlock()
-        1.释放锁的过程就是拆链，把释放锁的节点设置为false node.locked = false。
+        1.释放锁的过程就是拆链，把释放锁的节点设置为false listNode.locked = false。
         2.之后最重要的是把当前节点设置为上一个节点，这样就相当于把自己的节点拆下来了，等着垃圾回收。   
         AQS同步类：
         ```java

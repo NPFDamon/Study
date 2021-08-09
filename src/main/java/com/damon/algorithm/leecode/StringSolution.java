@@ -1,9 +1,6 @@
 package com.damon.algorithm.leecode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StringSolution {
 
@@ -54,9 +51,36 @@ public class StringSolution {
         }
     }
 
+    /**
+     * 有效的括号
+     * @param s
+     * @return
+     */
+
+    public static boolean isValid(String s) {
+        if (s.isEmpty()) {
+            return false;
+        }
+        Stack<Character> stack = new Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                stack.push(')');
+            } else if (c == '[') {
+                stack.push(']');
+            } else if (c == '{') {
+                stack.push('}');
+            } else if (stack.isEmpty() || c != stack.pop()) {
+                return false;
+            }
+        }
+        return stack.isEmpty();
+    }
+
+
     public static void main(String[] args) {
 
-        List<String> res = letterCombinations("12");
+//        List<String> res = letterCombinations("12");
+        boolean a = isValid("()[]{}");
         System.out.println("=println===>");
 
     }
