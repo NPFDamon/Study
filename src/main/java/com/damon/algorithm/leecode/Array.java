@@ -179,6 +179,36 @@ public class Array {
     }
 
 
+    /**
+     * 合并两个有序数组
+     * @param nums1
+     * @param nums2
+     * @param m
+     * @param n
+     */
+    public static void merge_two_array(int[] nums1,int[] nums2,int m,int n){
+        int p1 = 0,p2 = 0;
+        int res[] = new int[m+n];
+        int cur;
+        while (p1 < m || p2 < n){
+            if(p1 == m){
+                cur = nums2[p2++];
+            }else if(p2 == n){
+                cur = nums1[p1++];
+            }else if(nums1[p1] < nums2[p2]){
+                cur = nums1[p1++];
+            }else {
+                cur = nums2[p2 ++];
+            }
+            res[p1 + p2 -1] = cur;
+        }
+        for (int i = 0; i != m + n; ++i) {
+            nums1[i] = res[i];
+        }
+
+    }
+
+
     public static void main(String[] args) {
 //        int[] nums = {-1, 0, 3, 5, 9, 12};
 //        int[] nums = {5};
