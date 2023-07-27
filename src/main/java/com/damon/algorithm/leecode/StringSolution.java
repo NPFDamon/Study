@@ -76,6 +76,24 @@ public class StringSolution {
         return stack.isEmpty();
     }
 
+    public String addStrings(String num1, String num2) {
+        int m = num1.length() - 1;
+        int n = num2.length() - 1;
+        int y = 0;
+        StringBuilder sb = new StringBuilder();
+        while (m >=0 || n >=0 || y != 0){
+            int i = m >=0 ? num1.charAt(m) - '0' : 0;
+            int j = n >=0 ? num2.charAt(n) - '0' : 0;
+            int index = i + j + y;
+            int z = index % 10;
+            y = index / 10;
+            sb.append(z);
+            m --;
+            n --;
+        }
+        return sb.reverse().toString();
+    }
+
 
     public static void main(String[] args) {
 

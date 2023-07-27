@@ -270,6 +270,81 @@ public class ListReverse {
         }
     }
 
+    /**
+     * temp -> 1 -> 2 -> 3
+     *
+     * @param head
+     * @return
+     */
+
+    public ListNode swapPairs(ListNode head) {
+        ListNode dyn = new ListNode(0);
+        dyn.next = head;
+        ListNode temp = dyn;
+        while (temp.next != null && temp.next.next != null){
+            ListNode n1 = temp.next;
+            ListNode n2 = temp.next.next;
+            temp.next = n2;
+            n1.next = n2.next;
+            temp.next.next = n1;
+            temp = n1;
+        }
+        return dyn.next;
+    }
+
+    /**
+     * k个一组反转链表
+     *
+     * @param head
+     * @param k
+     * @return
+     */
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode hair = new ListNode(0);
+        hair.next = head;
+        ListNode pre = hair;
+        while (head != null){
+            ListNode tail = pre;
+            //找到尾结点
+            for(int i = 0; i < k ; i++){
+                tail = tail.next;
+                while (tail == null){
+                    return hair.next;
+                }
+            }
+            ListNode nex = tail.next;
+            ListNode[] res = myReverse(head, tail);
+            head = res[0];
+            tail = res[1];
+            pre.next = head;
+            tail.next = nex;
+
+            pre = tail;
+            head = tail.next;
+
+        }
+        return hair.next;
+    }
+
+    /**
+     * 1 -> 2 -> 3
+     * @param head
+     * @param tail
+     * @return
+     */
+    public ListNode[] myReverse(ListNode head, ListNode tail) {
+        ListNode prev = tail.next;
+        ListNode p = head;
+        while (prev != tail) {
+            ListNode nex = p.next;
+            p.next = prev;
+            prev = p;
+            p = nex;
+        }
+        return new ListNode[]{tail, head};
+    }
+
+
 
     public static void main(String[] args) {
         ListNode head = new ListNode(0);

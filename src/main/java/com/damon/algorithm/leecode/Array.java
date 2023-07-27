@@ -208,6 +208,118 @@ public class Array {
 
     }
 
+    /**
+     *
+     * 最长回文字符串
+     *
+     * @param s
+     * @return
+     */
+    public String longestPalindrome(String s) {
+        if(s.length() == 0){
+            return s;
+        }
+        int h = s.length();
+        int start = 0, end = 0;
+        for(int i = 0; i < h; i++){
+            int h1 = getString(i, i, s);
+            int h2 = getString(i, i +1, s);
+            int len = Math.max(h1, h2);
+            if(len > end - start){
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+
+        return  s.substring(start, end + 1);
+    }
+
+    private int getString(int left, int right, String s){
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)){
+            left --;
+            right++;
+        }
+        return right - left -1;
+    }
+
+
+    public String convert(String s, int numRows) {
+        if(numRows < 2){
+            return s;
+        }
+        List<StringBuilder> stringBuilders = new ArrayList<>();
+        for(int i = 0; i < numRows; i++){
+            stringBuilders.add(new StringBuilder());
+        }
+
+        int flag = -1 , i = 0;
+        for(int index = 0; index < s.length(); index ++){
+            StringBuilder sb = stringBuilders.get(i);
+            sb.append(s.charAt(index));
+            if (i == 0 || i == numRows - 1){
+                flag = -flag;
+            }
+            i +=flag;
+        }
+        StringBuilder res = new StringBuilder();
+        stringBuilders.forEach(res::append);
+        return res.toString();
+    }
+
+    public int reverse(int x) {
+        int res = 0;
+        while (x != 0){
+            if(res < Integer.MIN_VALUE / 10 || res > Integer.MAX_VALUE / 10){
+                return 0;
+            }
+            int dig = x % 10;
+            res = res * 10 + dig;
+            x = x / 10;
+        }
+        return res;
+    }
+
+    public int maxSubArray(int[] nums) {
+        int n = nums.length;
+        int[] dp = new int[n];
+        dp[0] = nums[0];
+        for(int i =1; i < n; i++){
+            if(nums[i] <= 0){
+                dp[i] = nums[i];
+            }else {
+                dp[i] = dp[i-1] + nums[i];
+            }
+        }
+        int res = dp[0];
+        for(int i = 0; i < n; i++){
+            res = Math.max(res, dp[i]);
+        }
+        return  res;
+    }
+
+    public String longestCommonPrefix(String[] strs) {
+        if(strs == null || strs.length == 0){
+            return "";
+        }
+        String pix = strs[0];
+        for(int i = 1; i < strs.length; i++){
+            pix = getPix(pix, strs[i]);
+            if(pix.length() == 0){
+                break;
+            }
+        }
+        return pix;
+    }
+
+    private String getPix(String s, String pix){
+        int min = Math.min(s.length(), pix.length());
+        int i = 0;
+        while (i < min && s.charAt(i) == pix.charAt(i)){
+            i ++;
+        }
+        return s.substring(0, i);
+    }
+
 
     public static void main(String[] args) {
 //        int[] nums = {-1, 0, 3, 5, 9, 12};

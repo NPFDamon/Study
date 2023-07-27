@@ -106,7 +106,16 @@
     但进行检索时，需要把所有元素都应用函数才能比较，显然成本太大。所以语句应该写成create_time = unix_timestamp(’2014-05-29’)。   
     5，尽量扩展索引，不要新建索引。比如表中已经有a的索引，现在要加(a,b)的索引，那么只需要修改原来的索引即可。每次新建索引都会新增一个b+树，索引太多
     同样会影响数据库性能。   
-    
+    * 索引下推（index condition pushdown）简称：ICP
+      ![avatar](https://github.com/NPFDamon/Study/blob/main/src/main/resources/mysql/MySQL.png)
+      MySQL服务层负责SQL语法解析、生成执行计划等，并调用存储引擎层去执行数据的存储和检索。
+      索引下推是指将上层（服务层）负责的事交给下层（引擎层）去处理。
+      https://cloud.tencent.com/developer/article/1875818
+    * 回表
+      https://zhuanlan.zhihu.com/p/401198674
+    * 覆盖索引
+      索引中包含和查询中的所有字段，这种情况下需要进行回表查询了。
+
 + 分库分表   
     分库和分表都有两种分割方式水平切分和垂直切分。   
     1，分表        
